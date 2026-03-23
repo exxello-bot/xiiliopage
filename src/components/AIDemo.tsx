@@ -1,27 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Mic, Volume2 } from "lucide-react";
+import Vapi from "@vapi-ai/web";
+
+const VAPI_PUBLIC_KEY = "e663a366-f475-4185-875f-d3841fa1a9a4";
+const ASSISTANT_ID = "503990f1-ec84-494b-91b2-3f013c6c591c";
 
 const AIDemo = () => {
   const [agentActive, setAgentActive] = useState(false);
+  const vapiRef = useRef<InstanceType<typeof Vapi> | null>(null);
 
-  const toggleAgent = () => {
-    if (!agentActive) {
-      // Open Vapi in a new window/tab — the mic button triggers it
-      window.open(
-        "https://vapi.ai?demo=true&shareKey=e663a366-f475-4185-875f-d3841fa1a9a4&assistantId=503990f1-ec84-494b-91b2-3f013c6c591c",
-        "_blank",
-        "noopener,noreferrer"
-      );
+  const toggleAgent = useCallback(() => {
+    if (agentActive) {
+      // Stop the call
+      vapiRef.current?.stop();
+      setAgentActive(false);
+    } else {
+      // Start inline voice call
+      if (!vapiRef.current) {
+        vapiRef.current = new Vapi(VAPI_PUBLIC_KEY);
+
+        vapiRef.current.on("call-start", () => setAgentActive(true));
+        vapiRef.current.on("call-end", () => setAgentActive(false));
+        vapiRef.current.on("error", (err) => {
+          console.error("Vapi error:", err);
+          setAgentActive(false);
+        });
+      }
+
+      setAgentActive(true);
+      vapiRef.current.start(ASSISTANT_ID);
     }
-    setAgentActive((prev) => !prev);
-  };
-
-  // Auto-reset active state after 3s so user can re-tap
-  useEffect(() => {
-    if (!agentActive) return;
-    const timer = setTimeout(() => setAgentActive(false), 3000);
-    return () => clearTimeout(timer);
   }, [agentActive]);
 
   return (
@@ -79,7 +88,7 @@ const AIDemo = () => {
                   ? "0 8px 32px -4px hsl(var(--primary) / 0.5), inset 0 -4px 12px hsl(var(--primary) / 0.2), inset 0 4px 8px hsl(0 0% 100% / 0.1)"
                   : "0 8px 32px -4px hsl(var(--primary) / 0.5), 0 2px 8px hsl(0 0% 0% / 0.3), inset 0 -4px 12px hsl(var(--primary) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.2)",
               }}
-              aria-label={agentActive ? "Agent launching..." : "Start voice agent"}
+              aria-label={agentActive ? "Stop voice agent" : "Start voice agent"}
             >
               {agentActive && (
                 <>
@@ -115,7 +124,7 @@ const AIDemo = () => {
 
         <div className="flex justify-center mb-6">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-widest">
-            {agentActive ? "Launching agent..." : "Tap to speak"}
+            {agentActive ? "Agent active — speak now" : "Tap to speak"}
           </p>
         </div>
       </div>
