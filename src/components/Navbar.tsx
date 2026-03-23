@@ -82,6 +82,12 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={() => { handleShare(); setOpen(false); }}
+            className="flex items-center gap-2 font-body text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Share2 className="w-4 h-4" /> Share
+          </button>
           <a
             href="#contact"
             onClick={() => setOpen(false)}
