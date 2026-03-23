@@ -46,7 +46,7 @@ const AIAgents = () => {
             >
               {/* Glowing pulse overlay on hover */}
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                style={{ boxShadow: "inset 0 0 40px hsl(185 100% 50% / 0.1), 0 0 60px hsl(185 100% 50% / 0.08)" }}
+                style={{ boxShadow: "inset 0 0 40px hsl(40 90% 55% / 0.1), 0 0 60px hsl(40 90% 55% / 0.08)" }}
               />
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
 
