@@ -37,8 +37,8 @@ const Hero = () => {
             className="relative w-42 h-42 object-contain"
             style={{
               mixBlendMode: 'screen',
-              maskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 100%)',
-              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 100%)',
+              maskImage: 'radial-gradient(ellipse 65% 60% at center, black 30%, transparent 90%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 65% 60% at center, black 30%, transparent 90%)',
             }}
           />
         </motion.div>
