@@ -54,7 +54,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-body text-xs text-muted-foreground">
-          © 2026 Xiilio.io. All rights reserved.
+          © 2026 Xiilio.ai. All rights reserved.
         </p>
         <p className="font-body text-xs text-muted-foreground">
           <a href="mailto:letsgo@xiilio.io" className="hover:text-primary transition-colors">letsgo@xiilio.io</a>
