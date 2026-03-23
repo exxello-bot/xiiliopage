@@ -55,7 +55,7 @@ const ContactForm = () => {
             we'll get back to you within 24 hours with a custom strategy outline.
           </p>
           <div className="space-y-3 font-body text-sm text-muted-foreground">
-            <p><a href="mailto:letsgo@xiilio.ai" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a></p>
+            <p><a href="mailto:itsgotime@24twelve.co" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a></p>
             <p>London, UK · Worldwide Remote</p>
           </div>
         </motion.div>
