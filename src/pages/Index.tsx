@@ -10,6 +10,7 @@ import Process from "@/components/Process";
 import Results from "@/components/Results";
 import CRMAnimation from "@/components/CRMAnimation";
 import AIDemo from "@/components/AIDemo";
+import SecurityPlatform from "@/components/SecurityPlatform";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import ContactForm from "@/components/ContactForm";
