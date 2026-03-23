@@ -50,15 +50,17 @@ const AIAgents = () => {
               />
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
 
-              <div className="aspect-square overflow-hidden">
+              <div className="aspect-square overflow-hidden relative">
                 <img
                   src={agent.img}
                   alt={`${agent.name} - ${agent.role}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
+                {/* Warm color overlay to harmonize cyan images with gold theme */}
+                <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-500" />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                 <h3 className="font-display text-2xl md:text-3xl text-primary text-glow group-hover:drop-shadow-[0_0_12px_hsl(40,90%,55%)] transition-all duration-500">
                   {agent.name}
