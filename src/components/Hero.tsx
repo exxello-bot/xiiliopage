@@ -10,7 +10,7 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay" style={{ backgroundColor: '#000000' }}>
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay bg-background">
       {/* Grid background with parallax */}
       <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }} className="absolute inset-0 grid-bg opacity-40" />
       

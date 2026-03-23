@@ -21,7 +21,7 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className="section-padding border-t border-border">
+    <section className="section-padding">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -20,7 +20,7 @@ const Marquee = () => {
   ));
 
   return (
-    <section className="py-8 border-y border-border overflow-hidden">
+    <section className="py-8 overflow-hidden">
       <div className="marquee-track">
         {content}
         {content}
