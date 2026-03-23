@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const links = [
   { label: "About", href: "#about" },
