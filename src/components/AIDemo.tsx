@@ -180,7 +180,7 @@ const AIDemo = () => {
             TALK TO OUR <span className="text-primary">AI AGENT</span>
           </h2>
           <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Ask anything about Xiilio — tap the mic to speak, or type below.
+            Ask anything about Xiilio — tap the mic to speak.
             Our AI reads back every answer aloud.
           </p>
         </motion.div>
@@ -297,8 +297,8 @@ const AIDemo = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input bar */}
-          <div className="border-t border-border p-3 md:p-4 flex items-center gap-2">
+          {/* Voice toggle */}
+          <div className="border-t border-border p-3 md:p-4 flex items-center justify-center gap-3">
             <button
               onClick={() => { setVoiceEnabled(!voiceEnabled); stopSpeaking(); }}
               className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
@@ -311,22 +311,9 @@ const AIDemo = () => {
             >
               {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </button>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Ask about Xiilio..."
-              className="flex-1 bg-transparent font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-            />
-            <button
-              onClick={() => handleSend()}
-              disabled={!input.trim() || isLoading}
-              className="shrink-0 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:box-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Send message"
-            >
-              <Send className="w-4 h-4" />
-            </button>
+            <span className="font-body text-xs text-muted-foreground">
+              {voiceEnabled ? "Voice responses on" : "Voice responses off"}
+            </span>
           </div>
         </motion.div>
       </div>
