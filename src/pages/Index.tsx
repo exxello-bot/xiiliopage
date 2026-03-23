@@ -37,9 +37,9 @@ const Index = () => {
       <Services />
       <AIAgents />
       <Process />
+      <AIDemo />
       <Results />
       <CRMAnimation />
-      <AIDemo />
       <SecurityPlatform />
       <Pricing />
       <Testimonials />
