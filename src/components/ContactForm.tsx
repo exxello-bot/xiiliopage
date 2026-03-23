@@ -46,7 +46,7 @@ const ContactForm = () => {
             we'll get back to you within 24 hours with a custom strategy outline.
           </p>
           <div className="space-y-3 font-body text-sm text-muted-foreground">
-            <p>hello@xiilio.io</p>
+            <p>letsgo@xiilio.io</p>
             <p>London, UK · Worldwide Remote</p>
           </div>
         </motion.div>
