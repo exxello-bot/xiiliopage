@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
