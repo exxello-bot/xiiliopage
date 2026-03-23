@@ -28,6 +28,24 @@ const AIDemo = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Auto-greet when section comes into view
+  useEffect(() => {
+    if (!sectionRef.current || hasGreeted) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasGreeted) {
+          setHasGreeted(true);
+          const greeting = "Welcome to Xiilio! I'm your AI growth agent. Ask me anything about our AI-powered lead generation, performance marketing, or how we can scale your business. What would you like to know?";
+          setMessages([{ role: "assistant", content: greeting }]);
+          speakTextRef.current?.(greeting);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [hasGreeted]);
+
   // Select the best available voice for richer, more human sound
   const selectedVoice = useMemo(() => {
     if (!("speechSynthesis" in window)) return null;
