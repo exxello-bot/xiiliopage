@@ -22,6 +22,7 @@ const AIDemo = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const recognitionRef = useRef<any>(null);
   const shouldAutoListenRef = useRef(false);
+  const startListeningRef = useRef<(() => void) | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
