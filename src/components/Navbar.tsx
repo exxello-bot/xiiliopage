@@ -12,6 +12,19 @@ const links = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleShare = async () => {
+    const url = window.location.origin;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Xiilio.io", url });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast({ title: "Link copied!", description: "Share link copied to clipboard." });
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
