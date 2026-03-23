@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -12,18 +13,26 @@ const ContactForm = () => {
   const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
   const [activeTab, setActiveTab] = useState<"form" | "calendar">("form");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       toast({ title: "Please fill in all required fields", variant: "destructive" });
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const { data, error } = await supabase.functions.invoke("submit-contact", {
+        body: form,
+      });
+      if (error) throw error;
       toast({ title: "Message sent!", description: "We'll get back to you within 24 hours." });
       setForm({ name: "", email: "", company: "", message: "" });
-    }, 1000);
+    } catch (err) {
+      console.error("Contact form error:", err);
+      toast({ title: "Something went wrong", description: "Please try again or email us directly.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
