@@ -246,19 +246,9 @@ const AIDemo = () => {
     }
   };
 
-  const toggleMic = () => {
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      toast({ title: "Not supported", description: "Speech recognition is not supported in this browser.", variant: "destructive" });
-      return;
-    }
-
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-      return;
-    }
-
-    stopSpeaking();
+  const startListening = useCallback(() => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
+    if (isListening || isLoading) return;
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -269,6 +259,7 @@ const AIDemo = () => {
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setIsListening(false);
+      shouldAutoListenRef.current = true;
       handleSend(transcript);
     };
     recognition.onerror = () => setIsListening(false);
@@ -277,6 +268,24 @@ const AIDemo = () => {
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
+  }, [isListening, isLoading, handleSend]);
+
+  const toggleMic = () => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+      toast({ title: "Not supported", description: "Speech recognition is not supported in this browser.", variant: "destructive" });
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      shouldAutoListenRef.current = false;
+      return;
+    }
+
+    stopSpeaking();
+    shouldAutoListenRef.current = true;
+    startListening();
   };
 
   return (
