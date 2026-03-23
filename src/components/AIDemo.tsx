@@ -37,14 +37,45 @@ const AIDemo = () => {
           setHasGreeted(true);
           const greeting = "Welcome to Xiilio! I'm your AI growth agent. Ask me anything about our AI-powered lead generation, performance marketing, or how we can scale your business. What would you like to know?";
           setMessages([{ role: "assistant", content: greeting }]);
-          speakText(greeting);
+          // Delay speak to let TTS voices load
+          setTimeout(() => {
+            if (voiceEnabled && "speechSynthesis" in window) {
+              const clean = greeting.replace(/[#*_`~>\[\]()!|]/g, "").replace(/\n+/g, ". ").replace(/\s+/g, " ").trim();
+              const sentences = clean.match(/[^.!?]+[.!?]+/g) || [clean];
+              let idx = 0;
+              const speakNextGreet = () => {
+                if (idx >= sentences.length) {
+                  setIsSpeaking(false);
+                  shouldAutoListenRef.current = true;
+                  setTimeout(() => startListeningRef.current?.(), 600);
+                  return;
+                }
+                const s = sentences[idx].trim();
+                if (!s) { idx++; speakNextGreet(); return; }
+                const utt = new SpeechSynthesisUtterance(s);
+                const voices = window.speechSynthesis.getVoices();
+                const names = ["Google UK English Female","Google UK English Male","Samantha","Karen","Daniel"];
+                let v = null;
+                for (const n of names) { v = voices.find(x => x.name.includes(n)); if (v) break; }
+                if (!v) v = voices.find(x => x.lang.startsWith("en")) || voices[0];
+                if (v) utt.voice = v;
+                utt.rate = 0.95 + Math.random() * 0.15;
+                utt.pitch = 0.95 + Math.random() * 0.1;
+                utt.onstart = () => setIsSpeaking(true);
+                utt.onend = () => { idx++; setTimeout(speakNextGreet, 80 + Math.random() * 120); };
+                utt.onerror = () => setIsSpeaking(false);
+                window.speechSynthesis.speak(utt);
+              };
+              speakNextGreet();
+            }
+          }, 500);
         }
       },
       { threshold: 0.3 }
     );
     observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, [hasGreeted]);
+  }, [hasGreeted, voiceEnabled]);
 
   // Select the best available voice for richer, more human sound
   const selectedVoice = useMemo(() => {
