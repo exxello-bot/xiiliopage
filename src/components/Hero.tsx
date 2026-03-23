@@ -10,9 +10,9 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay">
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay" style={{ backgroundColor: '#080808' }}>
       {/* Grid background with parallax */}
-      <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }} className="absolute inset-0 grid-bg opacity-60" />
+      <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }} className="absolute inset-0 grid-bg opacity-40" />
       
       {/* Glowing orb with parallax */}
       <motion.div
@@ -21,18 +21,21 @@ const Hero = () => {
       />
 
       <motion.div style={{ y, opacity }} className="relative z-10 section-padding text-center max-w-6xl mx-auto">
-        {/* Logo */}
+        {/* Logo with glowing pulsing background */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="relative flex items-center justify-center mb-8"
         >
-          <div className="absolute w-60 h-60 rounded-full bg-primary/10 blur-[80px] animate-pulse-glow" />
+          <div className="absolute w-80 h-80 rounded-full bg-primary/15 blur-[100px] animate-pulse-glow" />
+          <div className="absolute w-52 h-52 rounded-full bg-primary/25 blur-[60px] animate-pulse" />
+          <div className="absolute w-36 h-36 rounded-full bg-primary/10 blur-[30px] animate-ping" style={{ animationDuration: '3s' }} />
           <img
             src={xiilioLogo}
             alt="Xiilio logo"
-            className="relative w-42 h-42 object-contain mix-blend-lighten"
+            className="relative w-42 h-42 object-contain"
+            style={{ mixBlendMode: 'lighten' }}
           />
         </motion.div>
 
