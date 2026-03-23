@@ -60,7 +60,7 @@ const AIAgents = () => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                <h3 className="font-display text-2xl md:text-3xl text-primary text-glow group-hover:drop-shadow-[0_0_12px_hsl(185,100%,50%)] transition-all duration-500">
+                <h3 className="font-display text-2xl md:text-3xl text-primary text-glow group-hover:drop-shadow-[0_0_12px_hsl(40,90%,55%)] transition-all duration-500">
                   {agent.name}
                 </h3>
                 <p className="font-body text-xs md:text-sm text-muted-foreground uppercase tracking-widest group-hover:text-foreground transition-colors duration-500">
