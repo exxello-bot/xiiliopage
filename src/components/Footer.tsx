@@ -29,7 +29,7 @@ const Footer = () => {
         <div>
           <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4">Contact</p>
           <ul className="space-y-2 font-body text-sm text-muted-foreground">
-            <li>hello@nexusagency.ai</li>
+            <li>hello@xiilio.io</li>
             <li>London, UK</li>
             <li>Worldwide Remote</li>
           </ul>
