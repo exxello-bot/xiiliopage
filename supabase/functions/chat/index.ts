@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const WEBSITE_CONTEXT = `You are Xiilio's AI demo agent. You are knowledgeable about Xiilio.io — an AI-powered growth agency that serves clients worldwide.
+const WEBSITE_CONTEXT = `You are Xiilio's AI demo agent. You are knowledgeable about Xiilio.ai — an AI-powered growth agency that serves clients worldwide.
 
 Here is everything you know about Xiilio:
 
