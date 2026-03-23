@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse-glow" />
             <img
               src={xiilioLogo}
-              alt="Xiilio.io"
+              alt="Xiilio.ai"
               className="relative h-[151.2px] w-auto"
               style={{
                 mixBlendMode: 'screen',
@@ -54,10 +54,10 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-body text-xs text-muted-foreground">
-          © 2026 Xiilio.io. All rights reserved.
+          © 2026 Xiilio.ai. All rights reserved.
         </p>
         <p className="font-body text-xs text-muted-foreground">
-          <a href="mailto:letsgo@xiilio.io" className="hover:text-primary transition-colors">letsgo@xiilio.io</a>
+          <a href="mailto:letsgo@xiilio.ai" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a>
         </p>
         <p className="font-body text-xs text-muted-foreground">
           Built with AI. Powered by results.
