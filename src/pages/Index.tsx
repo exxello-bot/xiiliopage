@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { trackPageView } from "@/lib/analytics";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import VideoSection from "@/components/VideoSection";
@@ -24,6 +25,7 @@ const Index = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    trackPageView(pathname);
   }, [pathname]);
 
   return (
