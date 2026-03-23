@@ -17,8 +17,11 @@ const AIDemo = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [hasGreeted, setHasGreeted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const recognitionRef = useRef<any>(null);
+  const shouldAutoListenRef = useRef(false);
   const { toast } = useToast();
 
   useEffect(() => {
