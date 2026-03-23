@@ -100,7 +100,7 @@ const CRMAnimation = () => {
   ];
 
   return (
-    <section className="section-padding noise-overlay border-y border-border overflow-hidden">
+    <section className="section-padding noise-overlay overflow-hidden">
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

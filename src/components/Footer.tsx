@@ -2,7 +2,7 @@ import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border px-6 md:px-12 lg:px-20 py-16">
+    <footer className="px-6 md:px-12 lg:px-20 py-16">
       <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
         <div className="md:col-span-2">
           <a href="#" className="relative inline-block mb-4">
