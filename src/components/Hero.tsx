@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
@@ -20,6 +21,21 @@ const Hero = () => {
       />
 
       <motion.div style={{ y, opacity }} className="relative z-10 section-padding text-center max-w-6xl mx-auto">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="relative flex items-center justify-center mb-8"
+        >
+          <div className="absolute w-40 h-40 rounded-full bg-primary/15 blur-[60px] animate-pulse-glow" />
+          <img
+            src={xiilioLogo}
+            alt="Xiilio logo"
+            className="relative w-28 h-28 object-contain mix-blend-lighten"
+          />
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
