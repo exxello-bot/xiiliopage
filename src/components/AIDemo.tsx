@@ -302,6 +302,11 @@ const AIDemo = () => {
     setIsListening(true);
   }, [isListening, isLoading, handleSend]);
 
+  // Keep ref in sync for use in greeting effect
+  useEffect(() => {
+    startListeningRef.current = startListening;
+  }, [startListening]);
+
   const toggleMic = () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       toast({ title: "Not supported", description: "Speech recognition is not supported in this browser.", variant: "destructive" });
