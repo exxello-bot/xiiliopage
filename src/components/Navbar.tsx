@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const links = [
