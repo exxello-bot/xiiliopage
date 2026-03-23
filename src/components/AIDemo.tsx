@@ -316,10 +316,28 @@ const AIDemo = () => {
               }}
               aria-label={isListening ? "Stop listening" : "Start voice input"}
             >
+              {/* Waveform bars */}
               {(isListening || isSpeaking) && (
                 <>
                   <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-current" />
-                  <span className="absolute -inset-2 rounded-full animate-pulse opacity-10 bg-current" />
+                  {[...Array(12)].map((_, i) => {
+                    const angle = (i * 360) / 12;
+                    const delay = i * 0.08;
+                    return (
+                      <span
+                        key={i}
+                        className="absolute w-1 rounded-full bg-current opacity-60"
+                        style={{
+                          height: '12px',
+                          left: '50%',
+                          top: '50%',
+                          transformOrigin: '50% 0%',
+                          transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${isSpeaking ? 38 : 34}px)`,
+                          animation: `waveform ${0.4 + Math.random() * 0.4}s ease-in-out ${delay}s infinite alternate`,
+                        }}
+                      />
+                    );
+                  })}
                 </>
               )}
               {isListening ? (

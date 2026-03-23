@@ -10,6 +10,7 @@ import Process from "@/components/Process";
 import Results from "@/components/Results";
 import CRMAnimation from "@/components/CRMAnimation";
 import AIDemo from "@/components/AIDemo";
+import SecurityPlatform from "@/components/SecurityPlatform";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import ContactForm from "@/components/ContactForm";
@@ -17,7 +18,7 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen scroll-smooth">
+    <div className="min-h-screen scroll-smooth" ref={(el) => { if (el) window.scrollTo(0, 0); }}>
       <Navbar />
       <Hero />
       <VideoSection />
@@ -30,6 +31,7 @@ const Index = () => {
       <Results />
       <CRMAnimation />
       <AIDemo />
+      <SecurityPlatform />
       <Testimonials />
       <CTA />
       <ContactForm />
