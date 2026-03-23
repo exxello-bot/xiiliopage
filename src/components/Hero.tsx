@@ -34,8 +34,8 @@ const Hero = () => {
           <img
             src={xiilioLogo}
             alt="Xiilio logo"
-            className="relative w-42 h-42 object-contain drop-shadow-[0_0_40px_rgba(0,0,0,1)]"
-            style={{ mixBlendMode: 'lighten', filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.8))' }}
+            className="relative w-42 h-42 object-contain"
+            style={{ mixBlendMode: 'lighten' }}
           />
         </motion.div>
 
