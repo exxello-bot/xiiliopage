@@ -52,11 +52,22 @@ const AIAgents = () => {
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
 
               <div className="aspect-square overflow-hidden relative">
-                <img
+                <motion.img
                   src={agent.img}
                   alt={`${agent.name} - ${agent.role}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   loading="lazy"
+                  animate={{
+                    x: agent.anim.x,
+                    y: agent.anim.y,
+                    rotate: agent.anim.rotate,
+                    scale: agent.anim.scale,
+                  }}
+                  transition={{
+                    duration: agent.anim.duration,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 />
                 {/* Warm color overlay to harmonize cyan images with gold theme */}
                 <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
