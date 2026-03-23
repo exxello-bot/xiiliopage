@@ -28,6 +28,7 @@ const Index = () => {
       <AIAgents />
       <Process />
       <Results />
+      <CRMAnimation />
       <AIDemo />
       <Testimonials />
       <CTA />
