@@ -21,22 +21,24 @@ const About = () => {
             PARTNER.
           </h2>
           <p className="font-body text-muted-foreground leading-relaxed mb-6">
-            We combine AI automation, paid media precision, and conversion-obsessed 
-            design to build revenue engines — not just campaigns. From lead gen bots 
-            to full-funnel ad systems, everything we build is designed to compound.
+            Based across major international hubs, we partner with ambitious businesses 
+            at every stage — from disruptive startups to multi-billion dollar brands. 
+            We combine AI automation with proven marketing strategy to replace the slow, 
+            costly, and inconsistent processes that hold businesses back.
           </p>
           <p className="font-body text-muted-foreground leading-relaxed">
-            Founded by operators who've scaled brands across 15+ countries, 
-            we don't do fluff. We do pipelines, conversions, and measurable growth.
+            Multinational expertise across 15+ countries, serving SaaS, hospitality, 
+            finance, insurance, energy, healthcare, and beyond. We're embedded in your 
+            business and accountable for your results.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-2 gap-4">
           {[
-            { val: "£2M+", desc: "Pipeline Generated" },
+            { val: "4×", desc: "Average ROAS" },
             { val: "48hr", desc: "Average Go-Live" },
-            { val: "200%", desc: "Avg. ROI Lift" },
-            { val: "97%", desc: "Client Retention" },
+            { val: "200%", desc: "ROI First Month" },
+            { val: "80+", desc: "Languages Supported" },
           ].map((item, i) => (
             <motion.div
               key={item.desc}

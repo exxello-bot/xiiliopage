@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import { Bot, Target, Zap, BarChart3, Globe, Megaphone } from "lucide-react";
+import { Bot, Target, Zap, BarChart3, Globe, Megaphone, Video, Mail } from "lucide-react";
 
 const services = [
-  { icon: Bot, title: "AI Chatbots & Automations", desc: "24/7 lead qualification, booking & follow-up bots that never sleep." },
-  { icon: Target, title: "Performance Ads", desc: "Meta, Google & TikTok campaigns engineered for ROAS, not vanity metrics." },
-  { icon: Zap, title: "Funnel & Landing Pages", desc: "Conversion-optimized pages that turn traffic into revenue." },
-  { icon: BarChart3, title: "CRM & Pipeline Build", desc: "Automated sales pipelines that nurture leads from click to close." },
-  { icon: Globe, title: "Website Design & Dev", desc: "High-performance sites built to convert, not just look pretty." },
-  { icon: Megaphone, title: "Content & Social Strategy", desc: "AI-assisted content engines that keep your brand omnipresent." },
+  { icon: Bot, title: "AI Agents & Personas", desc: "Autonomous AI workers that qualify leads, book meetings, handle support & close sales — 24/7, fluent in 80+ languages." },
+  { icon: Target, title: "AI-Powered Lead Generation", desc: "Intelligent outreach that identifies ideal prospects, builds targeted campaigns & delivers qualified leads to your pipeline." },
+  { icon: Zap, title: "Digital Advertising", desc: "High-performance paid campaigns across search, social & display — engineered for ROI from the first week." },
+  { icon: Mail, title: "Email Marketing & Automation", desc: "Smart, personalized sequences that nurture prospects, re-engage past customers & convert interest into revenue." },
+  { icon: Megaphone, title: "Social Media Management", desc: "Consistent, on-brand content & growth strategy across all platforms — without consuming your team's time." },
+  { icon: Video, title: "AI Video Creation & Cloning", desc: "Bespoke AI influencers or cloned spokespeople generating high-quality video content on demand." },
+  { icon: Globe, title: "Web Design & SEO", desc: "Fast, modern websites built to rank on Google and convert visitors into paying customers." },
 ];
 
 const Services = () => {

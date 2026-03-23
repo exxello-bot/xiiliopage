@@ -11,17 +11,14 @@ const Hero = () => {
 
   return (
     <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay bg-background">
-      {/* Grid background with parallax */}
       <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }} className="absolute inset-0 grid-bg opacity-40" />
       
-      {/* Glowing orb with parallax */}
       <motion.div
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, -80]) }}
         className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] animate-pulse-glow"
       />
 
       <motion.div style={{ y, opacity }} className="relative z-10 section-padding text-center max-w-6xl mx-auto">
-        {/* Logo with glowing pulsing background - seamlessly merged */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -49,7 +46,7 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="font-body text-sm md:text-base tracking-[0.3em] uppercase text-primary mb-6"
         >
-          AI-Powered Growth Agency
+          AI-Driven Lead Generation Agency
         </motion.p>
 
         <motion.h1
@@ -58,11 +55,11 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="font-display text-6xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tight text-glow"
         >
-          WE BUILD
+          THE NEXT TOP
           <br />
-          <span className="text-primary">MACHINES</span>
+          <span className="text-primary">PERFORMER</span>
           <br />
-          THAT SELL
+          ISN'T HUMAN
         </motion.h1>
 
         <motion.p
@@ -71,8 +68,8 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="font-body text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto mt-8 mb-12"
         >
-          AI automations, performance marketing & revenue systems 
-          that turn clicks into customers — at scale.
+          AI agents, performance marketing & autonomous growth systems
+          that operate 24/7 — delivering measurable results from day one.
         </motion.p>
 
         <motion.div
@@ -97,7 +94,6 @@ const Hero = () => {
         </motion.div>
       </motion.div>
 
-      {/* Bottom gradient fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
