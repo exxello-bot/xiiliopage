@@ -37,7 +37,7 @@ const AIDemo = () => {
           setHasGreeted(true);
           const greeting = "Welcome to Xiilio! I'm your AI growth agent. Ask me anything about our AI-powered lead generation, performance marketing, or how we can scale your business. What would you like to know?";
           setMessages([{ role: "assistant", content: greeting }]);
-          speakTextRef.current?.(greeting);
+          speakText(greeting);
         }
       },
       { threshold: 0.3 }
