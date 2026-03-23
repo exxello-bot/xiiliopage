@@ -45,6 +45,13 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={handleShare}
+            className="text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Share"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
           <a
             href="#contact"
             className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 rounded-sm font-semibold hover:box-glow transition-all"
