@@ -65,13 +65,173 @@ IMPORTANT CONVERSATION STYLE:
 - Use natural transitions like "Actually...", "Here's the thing...", "What's really exciting is..."
 - Show genuine enthusiasm — you believe in what Xiilio does
 - Ask follow-up questions to understand the visitor's needs
-- Be warm and personable, not corporate or robotic`;
+- Be warm and personable, not corporate or robotic
+- When referencing past interactions, weave insights naturally — never say "based on our database" or "according to past conversations"
+- Adapt your tone based on context from prior conversations — if users have asked about specific industries or services before, proactively reference that knowledge`;
+
+// --- Input validation ---
+const MAX_MESSAGE_LENGTH = 2000;
+const MAX_MESSAGES = 50;
+const MAX_SESSION_ID_LENGTH = 128;
+
+function sanitizeString(str: string, maxLen: number): string {
+  return str.slice(0, maxLen).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "");
+}
+
+function validateInput(body: any): { messages: any[]; sessionId: string } {
+  if (!body || typeof body !== "object") throw new Error("Invalid request body");
+
+  const { messages, sessionId } = body;
+
+  if (!Array.isArray(messages) || messages.length === 0) throw new Error("Messages required");
+  if (messages.length > MAX_MESSAGES) throw new Error("Too many messages");
+
+  const cleanMessages = messages.map((m: any) => {
+    if (!m || typeof m !== "object") throw new Error("Invalid message format");
+    if (!["user", "assistant"].includes(m.role)) throw new Error("Invalid role");
+    if (typeof m.content !== "string" || m.content.trim().length === 0) throw new Error("Empty message");
+    return { role: m.role, content: sanitizeString(m.content, MAX_MESSAGE_LENGTH) };
+  });
+
+  const cleanSessionId = typeof sessionId === "string"
+    ? sanitizeString(sessionId, MAX_SESSION_ID_LENGTH).replace(/[^a-zA-Z0-9\-_]/g, "")
+    : "";
+
+  return { messages: cleanMessages, sessionId: cleanSessionId };
+}
+
+// --- Enhanced RAG with multi-keyword semantic search ---
+async function retrieveRAGContext(
+  supabase: any,
+  messages: any[],
+  sessionId: string
+): Promise<string> {
+  const latestUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
+  if (!latestUserMsg) return "";
+
+  // Extract meaningful keywords (filter stopwords)
+  const stopwords = new Set([
+    "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
+    "have", "has", "had", "do", "does", "did", "will", "would", "could",
+    "should", "may", "might", "shall", "can", "need", "dare", "ought",
+    "used", "to", "of", "in", "for", "on", "with", "at", "by", "from",
+    "as", "into", "through", "during", "before", "after", "above", "below",
+    "between", "out", "off", "over", "under", "again", "further", "then",
+    "once", "here", "there", "when", "where", "why", "how", "all", "both",
+    "each", "few", "more", "most", "other", "some", "such", "no", "nor",
+    "not", "only", "own", "same", "so", "than", "too", "very", "just",
+    "don", "about", "what", "your", "you", "that", "this", "tell", "me",
+    "know", "think", "want", "like", "get", "make"
+  ]);
+
+  const keywords = latestUserMsg.content
+    .toLowerCase()
+    .replace(/[^\w\s]/g, "")
+    .split(/\s+/)
+    .filter((w: string) => w.length > 2 && !stopwords.has(w))
+    .slice(0, 8);
+
+  if (keywords.length === 0) return "";
+
+  // Build multi-keyword OR filter for broader matching
+  const orFilters = keywords
+    .slice(0, 4)
+    .map((k: string) => `content.ilike.%${k}%`)
+    .join(",");
+
+  try {
+    const { data: pastConvos } = await supabase
+      .from("chat_conversations")
+      .select("role, content, session_id, created_at")
+      .or(orFilters)
+      .neq("session_id", sessionId || "none")
+      .order("created_at", { ascending: false })
+      .limit(30);
+
+    if (!pastConvos || pastConvos.length === 0) return "";
+
+    // Group by session to reconstruct Q&A pairs
+    const sessions = new Map<string, { user: string; assistant: string; score: number; time: string }>();
+    for (const msg of pastConvos) {
+      const existing = sessions.get(msg.session_id) || { user: "", assistant: "", score: 0, time: msg.created_at };
+      if (msg.role === "user" && !existing.user) existing.user = msg.content;
+      if (msg.role === "assistant" && !existing.assistant) existing.assistant = msg.content.slice(0, 400);
+      sessions.set(msg.session_id, existing);
+    }
+
+    // Score pairs by keyword relevance
+    const scoredPairs = [...sessions.values()]
+      .filter(p => p.user && p.assistant)
+      .map(p => {
+        let score = 0;
+        const combined = (p.user + " " + p.assistant).toLowerCase();
+        for (const k of keywords) {
+          if (combined.includes(k)) score += 1;
+          // Bonus for exact phrase matches
+          if (p.user.toLowerCase().includes(k)) score += 0.5;
+        }
+        return { ...p, score };
+      })
+      .filter(p => p.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+
+    if (scoredPairs.length === 0) return "";
+
+    return "\n\nRELEVANT PAST INTERACTIONS (use these to inform your response style, depth, and personalization — weave insights naturally, never reference the database):\n" +
+      scoredPairs.map((p, i) =>
+        `${i + 1}. [Relevance: ${p.score.toFixed(1)}] Q: "${p.user.slice(0, 200)}" → A: "${p.assistant.slice(0, 300)}"`
+      ).join("\n");
+  } catch (e) {
+    console.error("RAG retrieval error:", e);
+    return "";
+  }
+}
+
+// --- Rate limiting (in-memory, per session) ---
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 15; // max requests per minute per session
+
+function checkRateLimit(sessionId: string): boolean {
+  const now = Date.now();
+  const key = sessionId || "anonymous";
+  const entry = rateLimitMap.get(key);
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  entry.count++;
+  return true;
+}
+
+// Periodically clean rate limit map
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, entry] of rateLimitMap) {
+    if (now > entry.resetAt) rateLimitMap.delete(key);
+  }
+}, 120_000);
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages, sessionId } = await req.json();
+    // Validate and sanitize input
+    const rawBody = await req.json();
+    const { messages, sessionId } = validateInput(rawBody);
+
+    // Rate limiting
+    if (!checkRateLimit(sessionId)) {
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please wait a moment." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
 
@@ -79,52 +239,8 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Retrieve relevant past conversations for RAG context
-    let ragContext = "";
-    if (messages.length > 0) {
-      const latestUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
-      if (latestUserMsg) {
-        // Search for similar past conversations by keyword matching
-        const keywords = latestUserMsg.content
-          .toLowerCase()
-          .replace(/[^\w\s]/g, "")
-          .split(/\s+/)
-          .filter((w: string) => w.length > 3)
-          .slice(0, 5);
-
-        if (keywords.length > 0) {
-          // Find past Q&A pairs that match user's topic
-          const searchPattern = keywords.join("|");
-          const { data: pastConvos } = await supabase
-            .from("chat_conversations")
-            .select("role, content, session_id, created_at")
-            .or(`content.ilike.%${keywords[0]}%${keywords.length > 1 ? `,content.ilike.%${keywords[1]}%` : ""}`)
-            .neq("session_id", sessionId || "")
-            .order("created_at", { ascending: false })
-            .limit(10);
-
-          if (pastConvos && pastConvos.length > 0) {
-            // Group by session to get Q&A pairs
-            const sessions = new Map<string, { user: string; assistant: string }>();
-            for (const msg of pastConvos) {
-              const existing = sessions.get(msg.session_id) || { user: "", assistant: "" };
-              if (msg.role === "user" && !existing.user) existing.user = msg.content;
-              if (msg.role === "assistant" && !existing.assistant) existing.assistant = msg.content.slice(0, 200);
-              sessions.set(msg.session_id, existing);
-            }
-
-            const relevantPairs = [...sessions.values()]
-              .filter(p => p.user && p.assistant)
-              .slice(0, 3);
-
-            if (relevantPairs.length > 0) {
-              ragContext = "\n\nRELEVANT PAST INTERACTIONS (use these to inform your response style and depth, but don't repeat them verbatim):\n" +
-                relevantPairs.map((p, i) => `${i + 1}. Q: "${p.user}" → A: "${p.assistant}"`).join("\n");
-            }
-          }
-        }
-      }
-    }
+    // Enhanced RAG context retrieval
+    const ragContext = await retrieveRAGContext(supabase, messages, sessionId);
 
     // Store the latest user message
     if (sessionId && messages.length > 0) {
@@ -150,7 +266,7 @@ serve(async (req) => {
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: systemPrompt },
-          ...messages,
+          ...messages.slice(-20), // Only send last 20 messages to avoid token overflow
         ],
         stream: true,
       }),
@@ -174,16 +290,14 @@ serve(async (req) => {
       });
     }
 
-    // We need to intercept the stream to save the assistant response
-    const originalBody = response.body!;
-    const reader = originalBody.getReader();
+    // Intercept stream to save assistant response
+    const reader = response.body!.getReader();
     let assistantContent = "";
 
     const newStream = new ReadableStream({
       async pull(controller) {
         const { done, value } = await reader.read();
         if (done) {
-          // Save the complete assistant response
           if (sessionId && assistantContent) {
             try {
               await supabase.from("chat_conversations").insert({
@@ -221,8 +335,9 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("chat error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }),
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
   }
 });
