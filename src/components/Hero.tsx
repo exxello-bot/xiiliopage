@@ -10,7 +10,7 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay" style={{ backgroundColor: '#080808' }}>
+    <section ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden noise-overlay" style={{ backgroundColor: '#000000' }}>
       {/* Grid background with parallax */}
       <motion.div style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }} className="absolute inset-0 grid-bg opacity-40" />
       
@@ -21,7 +21,7 @@ const Hero = () => {
       />
 
       <motion.div style={{ y, opacity }} className="relative z-10 section-padding text-center max-w-6xl mx-auto">
-        {/* Logo with glowing pulsing background */}
+        {/* Logo with glowing pulsing background - seamlessly merged */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -34,8 +34,8 @@ const Hero = () => {
           <img
             src={xiilioLogo}
             alt="Xiilio logo"
-            className="relative w-42 h-42 object-contain"
-            style={{ mixBlendMode: 'lighten' }}
+            className="relative w-42 h-42 object-contain drop-shadow-[0_0_40px_rgba(0,0,0,1)]"
+            style={{ mixBlendMode: 'lighten', filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.8))' }}
           />
         </motion.div>
 
