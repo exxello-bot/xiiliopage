@@ -8,6 +8,7 @@ import Process from "@/components/Process";
 import Results from "@/components/Results";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
+import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 
 const Index = () => {
