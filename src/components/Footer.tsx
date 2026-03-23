@@ -38,7 +38,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="font-body text-xs text-muted-foreground">
-          © 2026 Nexus Agency. All rights reserved.
+          © 2026 Xiilio.io. All rights reserved.
         </p>
         <p className="font-body text-xs text-muted-foreground">
           Built with AI. Powered by results.
