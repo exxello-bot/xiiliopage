@@ -6,19 +6,29 @@ import agent4 from "@/assets/agent-4.jpg";
 import agent5 from "@/assets/agent-5.jpg";
 import agent6 from "@/assets/agent-6.jpg";
 
-// Each agent gets a unique idle animation pattern
+// Each agent gets a unique idle animation pattern + eye position for glow effect
 const agents = [
-  { img: agent1, name: "NOVA", role: "Lead Generation Agent", anim: { x: [0, 8, -4, 0], y: [0, -6, 3, 0], rotate: [0, 1.5, -1, 0], scale: [1, 1.06, 1.03, 1], duration: 8 } },
-  { img: agent2, name: "ARIA", role: "Conversational AI Agent", anim: { x: [0, -6, 5, 0], y: [0, 4, -5, 0], rotate: [0, -2, 1.5, 0], scale: [1, 1.04, 1.07, 1], duration: 10 } },
-  { img: agent3, name: "CORTEX", role: "Analytics & Insights Agent", anim: { x: [0, 5, -7, 0], y: [0, -3, 6, 0], rotate: [0, 1, -2, 0], scale: [1, 1.05, 1.02, 1], duration: 9 } },
-  { img: agent4, name: "NEXUS", role: "Automation Agent", anim: { x: [0, -4, 6, 0], y: [0, 5, -4, 0], rotate: [0, -1.5, 2, 0], scale: [1, 1.07, 1.04, 1], duration: 11 } },
-  { img: agent5, name: "SENTINEL", role: "Ad Targeting Agent", anim: { x: [0, 7, -3, 0], y: [0, -5, 4, 0], rotate: [0, 2, -1.5, 0], scale: [1, 1.03, 1.06, 1], duration: 7 } },
-  { img: agent6, name: "HERALD", role: "Outreach & Engagement Agent", anim: { x: [0, -5, 4, 0], y: [0, 3, -6, 0], rotate: [0, -1, 1.8, 0], scale: [1, 1.06, 1.03, 1], duration: 12 } },
+  { img: agent1, name: "NOVA", role: "Lead Generation Agent", anim: { x: [0, 8, -4, 0], y: [0, -6, 3, 0], rotate: [0, 1.5, -1, 0], scale: [1, 1.06, 1.03, 1], duration: 8 }, scanDelay: 0, eyes: { x: "50%", y: "35%" } },
+  { img: agent2, name: "ARIA", role: "Conversational AI Agent", anim: { x: [0, -6, 5, 0], y: [0, 4, -5, 0], rotate: [0, -2, 1.5, 0], scale: [1, 1.04, 1.07, 1], duration: 10 }, scanDelay: 1.5, eyes: { x: "50%", y: "35%" } },
+  { img: agent3, name: "CORTEX", role: "Analytics & Insights Agent", anim: { x: [0, 5, -7, 0], y: [0, -3, 6, 0], rotate: [0, 1, -2, 0], scale: [1, 1.05, 1.02, 1], duration: 9 }, scanDelay: 3, eyes: { x: "50%", y: "35%" } },
+  { img: agent4, name: "NEXUS", role: "Automation Agent", anim: { x: [0, -4, 6, 0], y: [0, 5, -4, 0], rotate: [0, -1.5, 2, 0], scale: [1, 1.07, 1.04, 1], duration: 11 }, scanDelay: 0.8, eyes: { x: "50%", y: "35%" } },
+  { img: agent5, name: "SENTINEL", role: "Ad Targeting Agent", anim: { x: [0, 7, -3, 0], y: [0, -5, 4, 0], rotate: [0, 2, -1.5, 0], scale: [1, 1.03, 1.06, 1], duration: 7 }, scanDelay: 2.2, eyes: { x: "50%", y: "35%" } },
+  { img: agent6, name: "HERALD", role: "Outreach & Engagement Agent", anim: { x: [0, -5, 4, 0], y: [0, 3, -6, 0], rotate: [0, -1, 1.8, 0], scale: [1, 1.06, 1.03, 1], duration: 12 }, scanDelay: 4, eyes: { x: "50%", y: "35%" } },
 ];
 
 const AIAgents = () => {
   return (
     <section id="agents" className="section-padding noise-overlay">
+      {/* Scan-line keyframes */}
+      <style>{`
+        @keyframes scanline-sweep {
+          0% { top: -10%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { top: 110%; opacity: 0; }
+        }
+      `}</style>
+
       <div className="relative z-10 max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -51,6 +61,17 @@ const AIAgents = () => {
               />
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
 
+              {/* Scan-line sweep effect */}
+              <div
+                className="absolute left-0 right-0 h-[2px] z-20 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(90deg, transparent 0%, hsl(40 90% 55% / 0.8) 30%, hsl(40 90% 55% / 1) 50%, hsl(40 90% 55% / 0.8) 70%, transparent 100%)',
+                  boxShadow: '0 0 15px 4px hsl(40 90% 55% / 0.4), 0 0 30px 8px hsl(40 90% 55% / 0.15)',
+                  animation: `scanline-sweep 4s ease-in-out infinite`,
+                  animationDelay: `${agent.scanDelay}s`,
+                }}
+              />
+
               <div className="aspect-square overflow-hidden relative">
                 <motion.img
                   src={agent.img}
@@ -71,6 +92,39 @@ const AIAgents = () => {
                 />
                 {/* Warm color overlay to harmonize cyan images with gold theme */}
                 <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
+
+                {/* Glowing eyes on hover */}
+                <div
+                  className="absolute z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    left: agent.eyes.x,
+                    top: agent.eyes.y,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  {/* Left eye */}
+                  <div
+                    className="absolute rounded-full"
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      left: '-12px',
+                      background: 'hsl(40 90% 55%)',
+                      boxShadow: '0 0 12px 6px hsl(40 90% 55% / 0.8), 0 0 30px 12px hsl(40 90% 55% / 0.4), 0 0 50px 20px hsl(40 90% 55% / 0.2)',
+                    }}
+                  />
+                  {/* Right eye */}
+                  <div
+                    className="absolute rounded-full"
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      right: '-12px',
+                      background: 'hsl(40 90% 55%)',
+                      boxShadow: '0 0 12px 6px hsl(40 90% 55% / 0.8), 0 0 30px 12px hsl(40 90% 55% / 0.4), 0 0 50px 20px hsl(40 90% 55% / 0.2)',
+                    }}
+                  />
+                </div>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-500" />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
