@@ -424,7 +424,7 @@ const AIDemo = () => {
 
         <div className="flex justify-center mb-6">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-widest">
-            {isListening ? "Listening..." : isSpeaking ? "Speaking..." : "Tap to speak"}
+            {isListening ? "Listening..." : isSpeaking ? "Speaking..." : isLoading ? "Thinking..." : "Tap to speak"}
           </p>
         </div>
 
