@@ -17,13 +17,66 @@ const AIDemo = () => {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [hasGreeted, setHasGreeted] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const recognitionRef = useRef<any>(null);
+  const shouldAutoListenRef = useRef(false);
+  const startListeningRef = useRef<(() => void) | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Auto-greet when section comes into view
+  useEffect(() => {
+    if (!sectionRef.current || hasGreeted) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasGreeted) {
+          setHasGreeted(true);
+          const greeting = "Welcome to Xiilio! I'm your AI growth agent. Ask me anything about our AI-powered lead generation, performance marketing, or how we can scale your business. What would you like to know?";
+          setMessages([{ role: "assistant", content: greeting }]);
+          // Delay speak to let TTS voices load
+          setTimeout(() => {
+            if (voiceEnabled && "speechSynthesis" in window) {
+              const clean = greeting.replace(/[#*_`~>\[\]()!|]/g, "").replace(/\n+/g, ". ").replace(/\s+/g, " ").trim();
+              const sentences = clean.match(/[^.!?]+[.!?]+/g) || [clean];
+              let idx = 0;
+              const speakNextGreet = () => {
+                if (idx >= sentences.length) {
+                  setIsSpeaking(false);
+                  shouldAutoListenRef.current = true;
+                  setTimeout(() => startListeningRef.current?.(), 600);
+                  return;
+                }
+                const s = sentences[idx].trim();
+                if (!s) { idx++; speakNextGreet(); return; }
+                const utt = new SpeechSynthesisUtterance(s);
+                const voices = window.speechSynthesis.getVoices();
+                const names = ["Google UK English Female","Google UK English Male","Samantha","Karen","Daniel"];
+                let v = null;
+                for (const n of names) { v = voices.find(x => x.name.includes(n)); if (v) break; }
+                if (!v) v = voices.find(x => x.lang.startsWith("en")) || voices[0];
+                if (v) utt.voice = v;
+                utt.rate = 0.95 + Math.random() * 0.15;
+                utt.pitch = 0.95 + Math.random() * 0.1;
+                utt.onstart = () => setIsSpeaking(true);
+                utt.onend = () => { idx++; setTimeout(speakNextGreet, 80 + Math.random() * 120); };
+                utt.onerror = () => setIsSpeaking(false);
+                window.speechSynthesis.speak(utt);
+              };
+              speakNextGreet();
+            }
+          }, 500);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [hasGreeted, voiceEnabled]);
 
   // Select the best available voice for richer, more human sound
   const selectedVoice = useMemo(() => {
@@ -85,6 +138,10 @@ const AIDemo = () => {
     const speakNext = () => {
       if (currentIndex >= sentences.length) {
         setIsSpeaking(false);
+        // Auto-listen after agent finishes speaking
+        if (shouldAutoListenRef.current) {
+          setTimeout(() => startListeningRef.current?.(), 600);
+        }
         return;
       }
 
@@ -221,19 +278,9 @@ const AIDemo = () => {
     }
   };
 
-  const toggleMic = () => {
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      toast({ title: "Not supported", description: "Speech recognition is not supported in this browser.", variant: "destructive" });
-      return;
-    }
-
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-      return;
-    }
-
-    stopSpeaking();
+  const startListening = useCallback(() => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
+    if (isListening || isLoading) return;
 
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -244,6 +291,7 @@ const AIDemo = () => {
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setIsListening(false);
+      shouldAutoListenRef.current = true;
       handleSend(transcript);
     };
     recognition.onerror = () => setIsListening(false);
@@ -252,10 +300,33 @@ const AIDemo = () => {
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
+  }, [isListening, isLoading, handleSend]);
+
+  // Keep ref in sync for use in greeting effect
+  useEffect(() => {
+    startListeningRef.current = startListening;
+  }, [startListening]);
+
+  const toggleMic = () => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+      toast({ title: "Not supported", description: "Speech recognition is not supported in this browser.", variant: "destructive" });
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      shouldAutoListenRef.current = false;
+      return;
+    }
+
+    stopSpeaking();
+    shouldAutoListenRef.current = true;
+    startListening();
   };
 
   return (
-    <section id="ai-demo" className="section-padding noise-overlay">
+    <section ref={sectionRef} id="ai-demo" className="section-padding noise-overlay">
       <div className="relative z-10 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -353,7 +424,7 @@ const AIDemo = () => {
 
         <div className="flex justify-center mb-6">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-widest">
-            {isListening ? "Listening..." : isSpeaking ? "Speaking..." : "Tap to speak"}
+            {isListening ? "Listening..." : isSpeaking ? "Speaking..." : isLoading ? "Thinking..." : "Tap to speak"}
           </p>
         </div>
 
