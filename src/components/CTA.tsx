@@ -9,7 +9,7 @@ const CTA = () => {
   const glowScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.2, 0.8]);
 
   return (
-    <section ref={ref} id="contact" className="section-padding relative overflow-hidden noise-overlay">
+    <section ref={ref} id="cta" className="section-padding relative overflow-hidden noise-overlay">
       {/* Glow background with parallax */}
       <motion.div
         style={{ scale: glowScale }}
@@ -41,7 +41,7 @@ const CTA = () => {
         </motion.p>
 
         <motion.a
-          href="#contact-form"
+          href="#contact"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

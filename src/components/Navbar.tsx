@@ -20,7 +20,7 @@ const Navbar = () => {
     const url = window.location.origin;
     if (navigator.share) {
       try {
-        await navigator.share({ title: "Xiilio.io", url });
+        await navigator.share({ title: "Xiilio.ai", url });
       } catch {}
     } else {
       await navigator.clipboard.writeText(url);
