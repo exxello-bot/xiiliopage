@@ -31,14 +31,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16">
-        <a href="#" className="relative flex items-center">
-          <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse-glow" />
-          <img
-            src={xiilioLogo}
-            alt="Xiilio.io"
-            className="relative h-[28px] w-auto"
-            style={{ mixBlendMode: 'screen', maskImage: 'radial-gradient(ellipse 80% 80% at center, black 50%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at center, black 50%, transparent 100%)' }}
-          />
+        <a href="mailto:letsgo@xiilio.io" className="relative font-display text-sm md:text-base tracking-widest bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent hover:from-yellow-300 hover:to-amber-400 transition-all">
+          letsgo@xiilio.io
         </a>
 
         {/* Desktop */}
