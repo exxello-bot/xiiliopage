@@ -106,6 +106,10 @@ const AIDemo = () => {
     const speakNext = () => {
       if (currentIndex >= sentences.length) {
         setIsSpeaking(false);
+        // Auto-listen after agent finishes speaking
+        if (shouldAutoListenRef.current) {
+          setTimeout(() => startListening(), 600);
+        }
         return;
       }
 
