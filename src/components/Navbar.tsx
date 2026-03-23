@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const links = [
   { label: "About", href: "#about" },
@@ -14,7 +15,10 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16">
-        <a href="#" className="font-display text-2xl text-primary">XIILIO<span className="text-muted-foreground">.io</span></a>
+        <a href="#" className="relative flex items-center">
+          <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full animate-pulse-glow" />
+          <img src={xiilioLogo} alt="Xiilio.io" className="relative h-10 w-auto" />
+        </a>
 
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-8">
