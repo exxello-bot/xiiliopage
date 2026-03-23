@@ -35,7 +35,7 @@ const Hero = () => {
             src={xiilioLogo}
             alt="Xiilio logo"
             className="relative w-42 h-42 object-contain"
-            style={{ mixBlendMode: 'lighten' }}
+            style={{ mixBlendMode: 'screen' }}
           />
         </motion.div>
 
