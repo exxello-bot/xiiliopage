@@ -57,7 +57,7 @@ const Footer = () => {
           © 2026 Xiilio.ai. All rights reserved.
         </p>
         <p className="font-body text-xs text-muted-foreground">
-          <a href="mailto:letsgo@xiilio.io" className="hover:text-primary transition-colors">letsgo@xiilio.io</a>
+          <a href="mailto:letsgo@xiilio.ai" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a>
         </p>
         <p className="font-body text-xs text-muted-foreground">
           Built with AI. Powered by results.
