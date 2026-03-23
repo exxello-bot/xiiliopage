@@ -8,6 +8,7 @@ import Services from "@/components/Services";
 import AIAgents from "@/components/AIAgents";
 import Process from "@/components/Process";
 import Results from "@/components/Results";
+import AIDemo from "@/components/AIDemo";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import ContactForm from "@/components/ContactForm";
@@ -15,7 +16,7 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen scroll-smooth">
       <Navbar />
       <Hero />
       <VideoSection />
@@ -26,6 +27,7 @@ const Index = () => {
       <AIAgents />
       <Process />
       <Results />
+      <AIDemo />
       <Testimonials />
       <CTA />
       <ContactForm />
