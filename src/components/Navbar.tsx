@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Share2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const links = [
@@ -11,6 +12,19 @@ const links = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleShare = async () => {
+    const url = window.location.origin;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Xiilio.io", url });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast({ title: "Link copied!", description: "Share link copied to clipboard." });
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -31,6 +45,13 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={handleShare}
+            className="text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Share"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
           <a
             href="#contact"
             className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 rounded-sm font-semibold hover:box-glow transition-all"
@@ -61,6 +82,12 @@ const Navbar = () => {
               {l.label}
             </a>
           ))}
+          <button
+            onClick={() => { handleShare(); setOpen(false); }}
+            className="flex items-center gap-2 font-body text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Share2 className="w-4 h-4" /> Share
+          </button>
           <a
             href="#contact"
             onClick={() => setOpen(false)}
