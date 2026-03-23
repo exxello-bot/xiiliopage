@@ -10,7 +10,7 @@ const Footer = () => {
             <img
               src={xiilioLogo}
               alt="Xiilio.io"
-              className="relative h-[25.2px] w-auto"
+              className="relative h-[75.6px] w-auto"
               style={{
                 mixBlendMode: 'screen',
                 maskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 90%)',
