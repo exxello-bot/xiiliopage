@@ -9,7 +9,7 @@ const Footer = () => {
             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse-glow" />
             <img
               src={xiilioLogo}
-              alt="Xiilio.io"
+              alt="Xiilio.ai"
               className="relative h-[151.2px] w-auto"
               style={{
                 mixBlendMode: 'screen',

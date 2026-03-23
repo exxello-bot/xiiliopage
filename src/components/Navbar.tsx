@@ -31,8 +31,8 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16">
-        <a href="mailto:letsgo@xiilio.io" className="relative font-display text-sm md:text-base tracking-widest bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent hover:from-yellow-300 hover:to-amber-400 transition-all">
-          letsgo@xiilio.io
+        <a href="mailto:letsgo@xiilio.ai" className="relative font-display text-sm md:text-base tracking-widest bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent hover:from-yellow-300 hover:to-amber-400 transition-all">
+          letsgo@xiilio.ai
         </a>
 
         {/* Desktop */}
