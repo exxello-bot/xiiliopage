@@ -140,7 +140,7 @@ const AIDemo = () => {
         setIsSpeaking(false);
         // Auto-listen after agent finishes speaking
         if (shouldAutoListenRef.current) {
-          setTimeout(() => startListening(), 600);
+          setTimeout(() => startListeningRef.current?.(), 600);
         }
         return;
       }
