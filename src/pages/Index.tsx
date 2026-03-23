@@ -17,7 +17,7 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen scroll-smooth">
+    <div className="min-h-screen scroll-smooth" ref={(el) => { if (el) window.scrollTo(0, 0); }}>
       <Navbar />
       <Hero />
       <VideoSection />
