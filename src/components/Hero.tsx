@@ -35,7 +35,11 @@ const Hero = () => {
             src={xiilioLogo}
             alt="Xiilio logo"
             className="relative w-42 h-42 object-contain"
-            style={{ mixBlendMode: 'screen' }}
+            style={{
+              mixBlendMode: 'screen',
+              maskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 100%)',
+              WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at center, black 40%, transparent 100%)',
+            }}
           />
         </motion.div>
 
