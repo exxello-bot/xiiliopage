@@ -8,6 +8,7 @@ import Services from "@/components/Services";
 import AIAgents from "@/components/AIAgents";
 import Process from "@/components/Process";
 import Results from "@/components/Results";
+import CRMAnimation from "@/components/CRMAnimation";
 import AIDemo from "@/components/AIDemo";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
@@ -27,6 +28,7 @@ const Index = () => {
       <AIAgents />
       <Process />
       <Results />
+      <CRMAnimation />
       <AIDemo />
       <Testimonials />
       <CTA />
