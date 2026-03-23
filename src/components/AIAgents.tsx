@@ -6,13 +6,14 @@ import agent4 from "@/assets/agent-4.jpg";
 import agent5 from "@/assets/agent-5.jpg";
 import agent6 from "@/assets/agent-6.jpg";
 
+// Each agent gets a unique idle animation pattern
 const agents = [
-  { img: agent1, name: "NOVA", role: "Lead Generation Agent" },
-  { img: agent2, name: "ARIA", role: "Conversational AI Agent" },
-  { img: agent3, name: "CORTEX", role: "Analytics & Insights Agent" },
-  { img: agent4, name: "NEXUS", role: "Automation Agent" },
-  { img: agent5, name: "SENTINEL", role: "Ad Targeting Agent" },
-  { img: agent6, name: "HERALD", role: "Outreach & Engagement Agent" },
+  { img: agent1, name: "NOVA", role: "Lead Generation Agent", anim: { x: [0, 8, -4, 0], y: [0, -6, 3, 0], rotate: [0, 1.5, -1, 0], scale: [1, 1.06, 1.03, 1], duration: 8 } },
+  { img: agent2, name: "ARIA", role: "Conversational AI Agent", anim: { x: [0, -6, 5, 0], y: [0, 4, -5, 0], rotate: [0, -2, 1.5, 0], scale: [1, 1.04, 1.07, 1], duration: 10 } },
+  { img: agent3, name: "CORTEX", role: "Analytics & Insights Agent", anim: { x: [0, 5, -7, 0], y: [0, -3, 6, 0], rotate: [0, 1, -2, 0], scale: [1, 1.05, 1.02, 1], duration: 9 } },
+  { img: agent4, name: "NEXUS", role: "Automation Agent", anim: { x: [0, -4, 6, 0], y: [0, 5, -4, 0], rotate: [0, -1.5, 2, 0], scale: [1, 1.07, 1.04, 1], duration: 11 } },
+  { img: agent5, name: "SENTINEL", role: "Ad Targeting Agent", anim: { x: [0, 7, -3, 0], y: [0, -5, 4, 0], rotate: [0, 2, -1.5, 0], scale: [1, 1.03, 1.06, 1], duration: 7 } },
+  { img: agent6, name: "HERALD", role: "Outreach & Engagement Agent", anim: { x: [0, -5, 4, 0], y: [0, 3, -6, 0], rotate: [0, -1, 1.8, 0], scale: [1, 1.06, 1.03, 1], duration: 12 } },
 ];
 
 const AIAgents = () => {
@@ -51,11 +52,22 @@ const AIAgents = () => {
               <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
 
               <div className="aspect-square overflow-hidden relative">
-                <img
+                <motion.img
                   src={agent.img}
                   alt={`${agent.name} - ${agent.role}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   loading="lazy"
+                  animate={{
+                    x: agent.anim.x,
+                    y: agent.anim.y,
+                    rotate: agent.anim.rotate,
+                    scale: agent.anim.scale,
+                  }}
+                  transition={{
+                    duration: agent.anim.duration,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 />
                 {/* Warm color overlay to harmonize cyan images with gold theme */}
                 <div className="absolute inset-0 bg-primary/15 mix-blend-overlay" />
