@@ -7,6 +7,7 @@ const links = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Results", href: "#results" },
+  { label: "Pricing", href: "#pricing" },
   { label: "AI Demo", href: "#ai-demo" },
   { label: "Contact", href: "#contact" },
 ];
@@ -35,7 +36,7 @@ const Navbar = () => {
           <img
             src={xiilioLogo}
             alt="Xiilio.io"
-            className="relative h-[18px] w-auto"
+            className="relative h-[28px] w-auto"
             style={{ mixBlendMode: 'screen', maskImage: 'radial-gradient(ellipse 80% 80% at center, black 50%, transparent 100%)', WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at center, black 50%, transparent 100%)' }}
           />
         </a>
