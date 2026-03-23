@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Mic, MicOff, Send, Bot, User, Loader2, Volume2, VolumeX } from "lucide-react";
+import { Mic, MicOff, Bot, User, Loader2, Volume2, VolumeX } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { useToast } from "@/hooks/use-toast";
 
@@ -8,26 +8,69 @@ type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
+// Generate a persistent session ID per browser tab
+const SESSION_ID = crypto.randomUUID();
+
 const AIDemo = () => {
   const [messages, setMessages] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
-  const latestAssistantRef = useRef("");
   const { toast } = useToast();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Select the best available voice for richer, more human sound
+  const selectedVoice = useMemo(() => {
+    if (!("speechSynthesis" in window)) return null;
+
+    const getVoice = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) return null;
+
+      // Prioritize high-quality voices
+      const preferredVoices = [
+        "Google UK English Female",
+        "Google UK English Male",
+        "Samantha", // macOS
+        "Karen",    // macOS Australian
+        "Daniel",   // macOS British
+        "Moira",    // macOS Irish
+        "Fiona",    // macOS Scottish
+        "Google US English",
+        "Microsoft Zira",
+        "Microsoft Mark",
+      ];
+
+      for (const name of preferredVoices) {
+        const v = voices.find(v => v.name.includes(name));
+        if (v) return v;
+      }
+
+      // Fallback: prefer en-GB or en-US voices
+      const enVoice = voices.find(v => v.lang.startsWith("en-GB")) ||
+                      voices.find(v => v.lang.startsWith("en-US")) ||
+                      voices.find(v => v.lang.startsWith("en"));
+      return enVoice || voices[0];
+    };
+
+    // Voices may load async
+    let voice = getVoice();
+    if (!voice) {
+      window.speechSynthesis.onvoiceschanged = () => { /* will re-select on next speak */ };
+    }
+    return voice;
+  }, []);
+
   const speakText = useCallback((text: string) => {
     if (!voiceEnabled || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    // Strip markdown for cleaner speech
+
     const clean = text
       .replace(/[#*_`~>\[\]()!|]/g, "")
       .replace(/\n+/g, ". ")
@@ -35,13 +78,64 @@ const AIDemo = () => {
       .trim();
     if (!clean) return;
 
-    const utterance = new SpeechSynthesisUtterance(clean);
-    utterance.rate = 1.05;
-    utterance.pitch = 1;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+    // Split into sentences for more natural delivery with pauses
+    const sentences = clean.match(/[^.!?]+[.!?]+/g) || [clean];
+
+    let currentIndex = 0;
+    const speakNext = () => {
+      if (currentIndex >= sentences.length) {
+        setIsSpeaking(false);
+        return;
+      }
+
+      const sentence = sentences[currentIndex].trim();
+      if (!sentence) {
+        currentIndex++;
+        speakNext();
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(sentence);
+
+      // Get best voice at speak time (voices may have loaded since init)
+      const voices = window.speechSynthesis.getVoices();
+      const preferredNames = [
+        "Google UK English Female", "Google UK English Male",
+        "Samantha", "Karen", "Daniel", "Moira", "Fiona",
+        "Google US English", "Microsoft Zira",
+      ];
+      let voice = null;
+      for (const name of preferredNames) {
+        voice = voices.find(v => v.name.includes(name));
+        if (voice) break;
+      }
+      if (!voice) {
+        voice = voices.find(v => v.lang.startsWith("en-GB")) ||
+                voices.find(v => v.lang.startsWith("en-US")) ||
+                voices.find(v => v.lang.startsWith("en")) ||
+                voices[0];
+      }
+      if (voice) utterance.voice = voice;
+
+      // Dynamic speech parameters for more human feel
+      utterance.rate = 0.95 + Math.random() * 0.15;  // Slight rate variation
+      utterance.pitch = 0.95 + Math.random() * 0.1;  // Subtle pitch variation
+      utterance.volume = 1;
+
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => {
+        currentIndex++;
+        // Small pause between sentences
+        setTimeout(speakNext, 80 + Math.random() * 120);
+      };
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    };
+
+    speakNext();
   }, [voiceEnabled]);
 
   const stopSpeaking = () => {
@@ -56,7 +150,7 @@ const AIDemo = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
       },
-      body: JSON.stringify({ messages: allMessages }),
+      body: JSON.stringify({ messages: allMessages, sessionId: SESSION_ID }),
     });
 
     if (!resp.ok) {
@@ -89,7 +183,6 @@ const AIDemo = () => {
           const content = parsed.choices?.[0]?.delta?.content;
           if (content) {
             assistantSoFar += content;
-            latestAssistantRef.current = assistantSoFar;
             setMessages((prev) => {
               const last = prev[prev.length - 1];
               if (last?.role === "assistant") {
@@ -105,20 +198,18 @@ const AIDemo = () => {
       }
     }
 
-    // Speak the full response after streaming completes
     if (assistantSoFar) {
       speakText(assistantSoFar);
     }
   };
 
   const handleSend = async (overrideInput?: string) => {
-    const text = overrideInput || input.trim();
+    const text = overrideInput;
     if (!text || isLoading) return;
     stopSpeaking();
     const userMsg: Msg = { role: "user", content: text };
     const updated = [...messages, userMsg];
     setMessages(updated);
-    setInput("");
     setIsLoading(true);
 
     try {
@@ -153,7 +244,6 @@ const AIDemo = () => {
     recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript;
       setIsListening(false);
-      // Auto-send voice input
       handleSend(transcript);
     };
     recognition.onerror = () => setIsListening(false);
@@ -180,8 +270,7 @@ const AIDemo = () => {
             TALK TO OUR <span className="text-primary">AI AGENT</span>
           </h2>
           <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Ask anything about Xiilio — tap the mic to speak.
-            Our AI reads back every answer aloud.
+            Tap the mic, ask anything about Xiilio — our agent listens, thinks, and speaks back.
           </p>
         </motion.div>
 
@@ -203,7 +292,6 @@ const AIDemo = () => {
             }`}
             aria-label={isListening ? "Stop listening" : "Start voice input"}
           >
-            {/* Pulse rings when active */}
             {(isListening || isSpeaking) && (
               <>
                 <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-current" />
@@ -233,7 +321,6 @@ const AIDemo = () => {
           viewport={{ once: true }}
           className="bg-card border border-border rounded-sm overflow-hidden"
         >
-          {/* Messages */}
           <div className="h-72 md:h-80 overflow-y-auto scrollbar-hide p-4 md:p-6 space-y-4">
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center gap-4">
@@ -242,7 +329,7 @@ const AIDemo = () => {
                 </div>
                 <div>
                   <p className="font-body text-sm text-muted-foreground">
-                    Hi! I'm Xiilio's AI agent. Ask me anything about our services.
+                    Hi! I'm Xiilio's AI agent. Tap the mic and ask me anything.
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center mt-4">
                     {["What services do you offer?", "Tell me about your AI agents", "What results have you achieved?"].map((q) => (
