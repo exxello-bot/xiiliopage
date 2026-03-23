@@ -5,6 +5,7 @@ import StatsBar from "@/components/StatsBar";
 import About from "@/components/About";
 import Marquee from "@/components/Marquee";
 import Services from "@/components/Services";
+import AIAgents from "@/components/AIAgents";
 import Process from "@/components/Process";
 import Results from "@/components/Results";
 import Testimonials from "@/components/Testimonials";
@@ -22,6 +23,7 @@ const Index = () => {
       <About />
       <Marquee />
       <Services />
+      <AIAgents />
       <Process />
       <Results />
       <Testimonials />
