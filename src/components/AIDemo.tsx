@@ -180,7 +180,7 @@ const AIDemo = () => {
             TALK TO OUR <span className="text-primary">AI AGENT</span>
           </h2>
           <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Ask anything about Xiilio — tap the mic to speak, or type below.
+            Ask anything about Xiilio — tap the mic to speak.
             Our AI reads back every answer aloud.
           </p>
         </motion.div>
