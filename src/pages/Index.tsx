@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import VideoSection from "@/components/VideoSection";
 import StatsBar from "@/components/StatsBar";
 import About from "@/components/About";
 import Marquee from "@/components/Marquee";
