@@ -326,7 +326,7 @@ const AIDemo = () => {
   };
 
   return (
-    <section id="ai-demo" className="section-padding noise-overlay">
+    <section ref={sectionRef} id="ai-demo" className="section-padding noise-overlay">
       <div className="relative z-10 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
