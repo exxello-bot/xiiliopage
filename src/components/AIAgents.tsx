@@ -41,8 +41,15 @@ const AIAgents = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="group relative overflow-hidden rounded-sm border border-border hover:border-glow transition-all duration-500"
+              whileHover={{ scale: 1.03, y: -4 }}
+              className="group relative overflow-hidden rounded-sm border border-border hover:border-glow transition-all duration-500 hover:box-glow"
             >
+              {/* Glowing pulse overlay on hover */}
+              <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ boxShadow: "inset 0 0 40px hsl(185 100% 50% / 0.1), 0 0 60px hsl(185 100% 50% / 0.08)" }}
+              />
+              <div className="absolute inset-0 z-10 rounded-sm opacity-0 group-hover:opacity-100 group-hover:animate-pulse-glow pointer-events-none bg-primary/5" />
+
               <div className="aspect-square overflow-hidden">
                 <img
                   src={agent.img}
@@ -53,10 +60,10 @@ const AIAgents = () => {
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                <h3 className="font-display text-2xl md:text-3xl text-primary text-glow">
+                <h3 className="font-display text-2xl md:text-3xl text-primary text-glow group-hover:drop-shadow-[0_0_12px_hsl(185,100%,50%)] transition-all duration-500">
                   {agent.name}
                 </h3>
-                <p className="font-body text-xs md:text-sm text-muted-foreground uppercase tracking-widest">
+                <p className="font-body text-xs md:text-sm text-muted-foreground uppercase tracking-widest group-hover:text-foreground transition-colors duration-500">
                   {agent.role}
                 </p>
               </div>

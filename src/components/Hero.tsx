@@ -28,11 +28,11 @@ const Hero = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="relative flex items-center justify-center mb-8"
         >
-          <div className="absolute w-40 h-40 rounded-full bg-primary/15 blur-[60px] animate-pulse-glow" />
+          <div className="absolute w-60 h-60 rounded-full bg-primary/10 blur-[80px] animate-pulse-glow" />
           <img
             src={xiilioLogo}
             alt="Xiilio logo"
-            className="relative w-28 h-28 object-contain mix-blend-lighten"
+            className="relative w-42 h-42 object-contain mix-blend-lighten"
           />
         </motion.div>
 
