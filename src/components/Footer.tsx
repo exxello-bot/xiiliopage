@@ -57,7 +57,7 @@ const Footer = () => {
           © 2026 Xiilio.io. All rights reserved.
         </p>
         <p className="font-body text-xs text-muted-foreground">
-          hello@xiilio.io
+          letsgo@xiilio.io
         </p>
         <p className="font-body text-xs text-muted-foreground">
           Built with AI. Powered by results.
