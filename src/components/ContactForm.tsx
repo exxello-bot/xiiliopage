@@ -146,15 +146,12 @@ const ContactForm = () => {
             <div className="bg-card border border-border rounded-sm p-6 text-center">
               <div className="rounded-sm overflow-hidden">
                 <iframe
-                  src="https://cal.com/xiilio/strategy-call"
+                  src="https://cal.com/mark-mcclafferty-y1xfgy"
                   className="w-full h-[500px] border-0"
                   title="Book a Strategy Call"
                   loading="lazy"
                 />
               </div>
-              <p className="font-body text-xs text-muted-foreground mt-4">
-                Replace the Cal.com link in the code with your actual scheduling URL
-              </p>
             </div>
           )}
         </motion.div>
