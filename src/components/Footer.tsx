@@ -1,3 +1,5 @@
+import xiilioLogo from "@/assets/xiilio-logo.png";
+
 const Footer = () => {
   return (
     <footer className="border-t border-border px-6 md:px-12 lg:px-20 py-16">
