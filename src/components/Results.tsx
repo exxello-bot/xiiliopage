@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
 const results = [
-  { metric: "200%", label: "ROI Increase", desc: "E-commerce brand scaled from £10k to £30k/mo in ad-driven revenue within 90 days." },
-  { metric: "£250K", label: "Pipeline Built", desc: "B2B SaaS company generated a £250k qualified pipeline using AI-powered outreach." },
-  { metric: "48hrs", label: "Go-Live Time", desc: "Full landing page + ad campaign + chatbot deployed in under 48 hours." },
+  { metric: "200%", label: "ROI First Month", desc: "Clients consistently achieve 200% ROI within the first month of working with us." },
+  { metric: "80", label: "Meetings in 5 Days", desc: "80 booked meetings in just 5 days using our AI-powered outreach infrastructure." },
+  { metric: "4×", label: "Average ROAS", desc: "4x average return on ad spend across search, social & display campaigns." },
 ];
 
 const Results = () => {

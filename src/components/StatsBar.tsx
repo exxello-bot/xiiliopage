@@ -4,7 +4,7 @@ const stats = [
   { value: "600+", label: "Leads Generated" },
   { value: "4×", label: "Average ROAS" },
   { value: "38%", label: "ROI Increase" },
-  { value: "15+", label: "Countries Served" },
+  { value: "80+", label: "Languages" },
 ];
 
 const StatsBar = () => {

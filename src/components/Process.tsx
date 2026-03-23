@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
 const steps = [
-  { num: "01", title: "DISCOVERY", desc: "Deep dive into your business, audience & bottlenecks. We audit everything and map your growth levers." },
-  { num: "02", title: "BUILD", desc: "We design, develop and deploy your AI-powered growth system — ads, funnels, automations, everything." },
-  { num: "03", title: "SCALE", desc: "Data-driven optimisation. We test, iterate and scale what works. Your revenue compounds month over month." },
+  { num: "01", title: "DISCOVERY", desc: "Deep dive into your business, audience & growth challenges. We identify root causes and define the exact infrastructure needed to solve them." },
+  { num: "02", title: "BUILD", desc: "We design, build and deploy your AI-powered growth system — agents, campaigns, automations — going live in as little as 24 to 48 hours." },
+  { num: "03", title: "SCALE", desc: "Autonomous operation with real-time reporting and data advisory. We test, iterate and scale — so you always know what's working." },
 ];
 
 const Process = () => {

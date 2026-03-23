@@ -274,38 +274,63 @@ const AIDemo = () => {
           </p>
         </motion.div>
 
-        {/* Central mic button */}
+        {/* Central mic button with 3D glow */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           className="flex justify-center mb-8"
         >
-          <button
-            onClick={toggleMic}
-            className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-500 ${
+          <div className="relative">
+            {/* Ambient glow layers */}
+            <div className={`absolute -inset-6 rounded-full blur-[30px] transition-all duration-700 ${
               isListening
-                ? "bg-destructive text-destructive-foreground scale-110"
+                ? "bg-destructive/40 animate-pulse"
                 : isSpeaking
-                  ? "bg-primary/20 text-primary"
-                  : "bg-primary text-primary-foreground hover:box-glow hover:scale-105"
-            }`}
-            aria-label={isListening ? "Stop listening" : "Start voice input"}
-          >
-            {(isListening || isSpeaking) && (
-              <>
-                <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-current" />
-                <span className="absolute -inset-2 rounded-full animate-pulse opacity-10 bg-current" />
-              </>
-            )}
-            {isListening ? (
-              <MicOff className="w-8 h-8 md:w-10 md:h-10 relative z-10" />
-            ) : isSpeaking ? (
-              <Volume2 className="w-8 h-8 md:w-10 md:h-10 relative z-10 animate-pulse" />
-            ) : (
-              <Mic className="w-8 h-8 md:w-10 md:h-10 relative z-10" />
-            )}
-          </button>
+                  ? "bg-primary/30 animate-pulse"
+                  : "bg-primary/20"
+            }`} />
+            <div className={`absolute -inset-3 rounded-full blur-[15px] transition-all duration-500 ${
+              isListening
+                ? "bg-destructive/30"
+                : isSpeaking
+                  ? "bg-primary/25"
+                  : "bg-primary/15"
+            }`} />
+
+            <button
+              onClick={toggleMic}
+              className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-500 ${
+                isListening
+                  ? "bg-destructive text-destructive-foreground scale-110"
+                  : isSpeaking
+                    ? "bg-primary/20 text-primary"
+                    : "bg-primary text-primary-foreground hover:scale-105"
+              }`}
+              style={{
+                boxShadow: isListening
+                  ? "0 8px 32px -4px hsl(var(--destructive) / 0.6), inset 0 -4px 12px hsl(var(--destructive) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.15)"
+                  : isSpeaking
+                    ? "0 8px 32px -4px hsl(var(--primary) / 0.5), inset 0 -4px 12px hsl(var(--primary) / 0.2), inset 0 4px 8px hsl(0 0% 100% / 0.1)"
+                    : "0 8px 32px -4px hsl(var(--primary) / 0.5), 0 2px 8px hsl(0 0% 0% / 0.3), inset 0 -4px 12px hsl(var(--primary) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.2)",
+              }}
+              aria-label={isListening ? "Stop listening" : "Start voice input"}
+            >
+              {(isListening || isSpeaking) && (
+                <>
+                  <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-current" />
+                  <span className="absolute -inset-2 rounded-full animate-pulse opacity-10 bg-current" />
+                </>
+              )}
+              {isListening ? (
+                <MicOff className="w-8 h-8 md:w-10 md:h-10 relative z-10 drop-shadow-lg" />
+              ) : isSpeaking ? (
+                <Volume2 className="w-8 h-8 md:w-10 md:h-10 relative z-10 animate-pulse drop-shadow-lg" />
+              ) : (
+                <Mic className="w-8 h-8 md:w-10 md:h-10 relative z-10 drop-shadow-lg" />
+              )}
+            </button>
+          </div>
         </motion.div>
 
         <div className="flex justify-center mb-6">
