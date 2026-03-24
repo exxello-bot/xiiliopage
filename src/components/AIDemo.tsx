@@ -51,7 +51,7 @@ XIILIO SERVICES:
 - Rapid 24-48 hour deployment
 
 TEAM MEMBERS (for booking appointments):
-UK-based: Mark, Carl
+UK-based: Mark, Carl, Maddy
 USA-based: Nick, Don, CJ, Theo
 
 When booking, ask the caller:

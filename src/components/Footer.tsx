@@ -41,13 +41,18 @@ const Footer = () => {
         </div>
 
         <div>
-          <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4">Locations</p>
+          <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4">UK Team</p>
           <ul className="space-y-2 font-body text-sm text-muted-foreground">
-            <li>London, UK</li>
-            <li>New York, USA</li>
-            <li>Los Angeles, USA</li>
-            <li>Dubai, UAE</li>
-            <li className="text-primary/80 pt-1">Worldwide Remote</li>
+            <li><span className="text-foreground">Mark</span> — Founder. Bad Boy Made Good.</li>
+            <li><span className="text-foreground">Carl</span> — Partner. The Gentleman.</li>
+            <li><span className="text-foreground">Maddy</span> — The Posh Bird.</li>
+          </ul>
+          <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4 mt-6">USA Team</p>
+          <ul className="space-y-2 font-body text-sm text-muted-foreground">
+            <li><span className="text-foreground">Nick</span> — Partner. The Godfather.</li>
+            <li><span className="text-foreground">Don</span> — The All American Boy.</li>
+            <li><span className="text-foreground">Theo</span> — The Face.</li>
+            <li><span className="text-foreground">CJ</span> — The Brain.</li>
           </ul>
         </div>
       </div>
