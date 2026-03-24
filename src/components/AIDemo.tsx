@@ -129,7 +129,7 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
                   ? "0 8px 32px -4px hsl(var(--primary) / 0.5), inset 0 -4px 12px hsl(var(--primary) / 0.2), inset 0 4px 8px hsl(0 0% 100% / 0.1)"
                   : "0 8px 32px -4px hsl(var(--primary) / 0.5), 0 2px 8px hsl(0 0% 0% / 0.3), inset 0 -4px 12px hsl(var(--primary) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.2)",
               }}
-              aria-label={agentActive ? "Stop voice agent" : "Start voice agent"}
+              aria-label={agentActive ? "Stop Aria" : "Talk to Aria"}
             >
               {agentActive && (
                 <>
