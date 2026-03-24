@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Share2 } from "lucide-react";
+import { Menu, X, Share2, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 
