@@ -52,6 +52,12 @@ const Navbar = () => {
             <Share2 className="w-4 h-4" />
           </button>
           <a
+            href="/install"
+            className="font-body text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+          >
+            <Download className="w-3.5 h-3.5" /> Install
+          </a>
+          <a
             href="#contact"
             className="font-body text-xs uppercase tracking-[0.2em] bg-primary text-primary-foreground px-5 py-2 rounded-sm font-semibold hover:box-glow transition-all"
           >
