@@ -87,10 +87,10 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
             Live Demo
           </p>
           <h2 className="font-display text-5xl md:text-7xl mb-4">
-            TALK TO OUR <span className="text-primary">AI AGENT</span>
+            MEET <span className="text-primary">ARIA</span>
           </h2>
           <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Tap the mic, ask anything about Xiilio — our agent listens, thinks, and speaks back.
+            Tap the mic to speak with Aria — she'll answer your questions about Xiilio and book a call with our team.
           </p>
         </motion.div>
 
