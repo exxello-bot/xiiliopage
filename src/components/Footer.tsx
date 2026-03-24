@@ -93,9 +93,14 @@ const Footer = () => {
          <p className="font-body text-xs text-muted-foreground">
            © 2026 Xiilio.ai. All rights reserved.
          </p>
-         <Link to="/privacy-policy" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
-           Privacy Policy
-         </Link>
+         <div className="flex gap-4">
+           <Link to="/privacy-policy" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+             Privacy Policy
+           </Link>
+           <Link to="/terms-of-service" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+             Terms of Service
+           </Link>
+         </div>
          <p className="font-body text-xs text-muted-foreground">
            <a href="mailto:itsgotime@24twelve.co" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a>
          </p>
