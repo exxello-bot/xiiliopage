@@ -43,16 +43,16 @@ const Footer = () => {
         <div>
           <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4">UK Team</p>
           <ul className="space-y-2 font-body text-sm text-muted-foreground">
-            <li><span className="text-foreground">Mark</span> — Founder. Bad Boy Made Good.</li>
-            <li><span className="text-foreground">Carl</span> — Partner. The Gentleman.</li>
-            <li><span className="text-foreground">Maddy</span> — The Posh Bird.</li>
+            <li><span className="text-foreground">Mark</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">Founder. Bad Boy Made Good.</span></li>
+            <li><span className="text-foreground">Carl</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">Partner. The Gentleman.</span></li>
+            <li><span className="text-foreground">Maddy</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">The Posh Bird.</span></li>
           </ul>
           <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4 mt-6">USA Team</p>
           <ul className="space-y-2 font-body text-sm text-muted-foreground">
-            <li><span className="text-foreground">Nick</span> — Partner. The Godfather.</li>
-            <li><span className="text-foreground">Don</span> — The All American Boy.</li>
-            <li><span className="text-foreground">Theo</span> — The Face.</li>
-            <li><span className="text-foreground">CJ</span> — The Brain.</li>
+            <li><span className="text-foreground">Nick</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">Partner. The Godfather.</span></li>
+            <li><span className="text-foreground">Don</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">The All American Boy.</span></li>
+            <li><span className="text-foreground">Theo</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">The Face.</span></li>
+            <li><span className="text-foreground">CJ</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">The Brain.</span></li>
           </ul>
         </div>
       </div>
