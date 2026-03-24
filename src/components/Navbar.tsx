@@ -5,7 +5,6 @@ import { useToast } from "@/hooks/use-toast";
 
 const links = [
   { label: "About", href: "#about" },
-  { label: "Results", href: "#results" },
   { label: "Pricing", href: "#pricing" },
   { label: "Security", href: "#security" },
   { label: "AI Demo", href: "#ai-demo" },
