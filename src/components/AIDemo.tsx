@@ -165,7 +165,7 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
 
         <div className="flex justify-center mb-6">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-widest">
-            {agentActive ? "Agent active — speak now" : "Tap to speak"}
+            {agentActive ? "Aria is listening — speak now" : "Tap to speak with Aria"}
           </p>
         </div>
       </div>
