@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import xiilioLogo from "@/assets/xiilio-logo.png";
 
 const Footer = () => {
