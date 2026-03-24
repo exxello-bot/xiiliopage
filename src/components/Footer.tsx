@@ -90,15 +90,18 @@ const Footer = () => {
           </a>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="font-body text-xs text-muted-foreground">
-          © 2026 Xiilio.ai. All rights reserved.
-        </p>
-        <p className="font-body text-xs text-muted-foreground">
-          <a href="mailto:itsgotime@24twelve.co" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a>
-        </p>
-        <p className="font-body text-xs text-muted-foreground">
-          Built with AI. Powered by results.
-        </p>
+         <p className="font-body text-xs text-muted-foreground">
+           © 2026 Xiilio.ai. All rights reserved.
+         </p>
+         <Link to="/privacy-policy" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+           Privacy Policy
+         </Link>
+         <p className="font-body text-xs text-muted-foreground">
+           <a href="mailto:itsgotime@24twelve.co" className="hover:text-primary transition-colors">letsgo@xiilio.ai</a>
+         </p>
+         <p className="font-body text-xs text-muted-foreground">
+           Built with AI. Powered by results.
+         </p>
         </div>
       </div>
     </footer>
