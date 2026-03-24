@@ -105,15 +105,15 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
             <div
               className={`absolute -inset-6 rounded-full blur-[30px] transition-all duration-700 ${
                 agentActive
-                  ? "bg-primary/30 animate-pulse"
-                  : "bg-primary/20"
+                  ? "bg-blue-400/30 animate-pulse"
+                  : "bg-blue-400/20"
               }`}
             />
             <div
               className={`absolute -inset-3 rounded-full blur-[15px] transition-all duration-500 ${
                 agentActive
-                  ? "bg-primary/25"
-                  : "bg-primary/15"
+                  ? "bg-blue-400/25"
+                  : "bg-blue-400/15"
               }`}
             />
 
