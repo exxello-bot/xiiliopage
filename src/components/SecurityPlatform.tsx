@@ -59,9 +59,18 @@ const SecurityPlatform = () => (
         <h2 className="font-display text-5xl md:text-7xl mb-4">
           ENTERPRISE-GRADE <span className="text-primary">SECURITY</span>
         </h2>
-        <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
+        <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto mb-6">
           Built on a secure foundation so your data and your clients' data stay protected at every layer.
         </p>
+        <a
+          href="/Xiilio_CRM_Security.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-primary/10 border border-primary/30 text-primary font-body text-sm hover:bg-primary/20 transition-colors"
+        >
+          <FileDown className="w-4 h-4" />
+          Download Security & Compliance Guide
+        </a>
       </motion.div>
 
       <motion.div
