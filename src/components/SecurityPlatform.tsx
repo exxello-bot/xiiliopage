@@ -45,7 +45,7 @@ const item = {
 };
 
 const SecurityPlatform = () => (
-  <section className="section-padding noise-overlay">
+  <section id="security" className="section-padding noise-overlay">
     <div className="relative z-10 max-w-6xl mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
