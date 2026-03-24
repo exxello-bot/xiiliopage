@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Shield, Lock, Globe, Fingerprint, Server, Eye } from "lucide-react";
+import { Shield, Lock, Globe, Fingerprint, Server, Eye, FileDown } from "lucide-react";
 
 const features = [
   {
