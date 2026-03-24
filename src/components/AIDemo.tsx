@@ -105,29 +105,32 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
             <div
               className={`absolute -inset-6 rounded-full blur-[30px] transition-all duration-700 ${
                 agentActive
-                  ? "bg-primary/30 animate-pulse"
-                  : "bg-primary/20"
+                  ? "bg-blue-400/30 animate-pulse"
+                  : "bg-blue-400/20"
               }`}
             />
             <div
               className={`absolute -inset-3 rounded-full blur-[15px] transition-all duration-500 ${
                 agentActive
-                  ? "bg-primary/25"
-                  : "bg-primary/15"
+                  ? "bg-blue-400/25"
+                  : "bg-blue-400/15"
               }`}
             />
 
             <button
               onClick={toggleAgent}
-              className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-500 ${
+              className={`relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-500 text-white ${
                 agentActive
-                  ? "bg-primary/20 text-primary scale-110"
-                  : "bg-primary text-primary-foreground hover:scale-105"
+                  ? "scale-110"
+                  : "hover:scale-105"
               }`}
               style={{
+                background: agentActive
+                  ? "linear-gradient(135deg, rgba(96,165,250,0.2), rgba(148,163,184,0.2))"
+                  : "linear-gradient(135deg, #60a5fa, #94a3b8, #3b82f6)",
                 boxShadow: agentActive
-                  ? "0 8px 32px -4px hsl(var(--primary) / 0.5), inset 0 -4px 12px hsl(var(--primary) / 0.2), inset 0 4px 8px hsl(0 0% 100% / 0.1)"
-                  : "0 8px 32px -4px hsl(var(--primary) / 0.5), 0 2px 8px hsl(0 0% 0% / 0.3), inset 0 -4px 12px hsl(var(--primary) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.2)",
+                  ? "0 8px 32px -4px rgba(96,165,250,0.5), inset 0 -4px 12px rgba(96,165,250,0.2), inset 0 4px 8px rgba(255,255,255,0.1)"
+                  : "0 8px 32px -4px rgba(96,165,250,0.5), 0 2px 8px rgba(0,0,0,0.3), inset 0 -4px 12px rgba(59,130,246,0.3), inset 0 4px 8px rgba(255,255,255,0.2)",
               }}
               aria-label={agentActive ? "Stop Aria" : "Talk to Aria"}
             >
