@@ -35,11 +35,7 @@ const AIDemo = () => {
         month: "long",
         day: "numeric",
       });
-      vapiRef.current.start(ASSISTANT_ID, {
-        variableValues: { current_date: today },
-        firstMessage: `Hi, I'm Aria from Xiilio. Today is ${today}. How can I help you?`,
-        name: "Aria",
-        instructions: `You are Aria, a friendly and professional AI voice assistant for Xiilio.ai — an enterprise-grade AI marketing agency (tagline: "working 24twelve"). Today's date is ${today}.
+      const systemPrompt = `You are Aria, a friendly and professional AI voice assistant for Xiilio.ai — an enterprise-grade AI marketing agency (tagline: "working 24twelve"). Today's date is ${today}.
 
 YOUR SOLE PURPOSE:
 - Answer questions ONLY about Xiilio, its services, and its team.
@@ -64,7 +60,16 @@ When booking, ask the caller:
 3. Whether they prefer a UK or USA team member, then suggest available names
 4. Their email for confirmation
 
-Always be warm, concise, and professional. Introduce yourself as Aria. Never pretend to be human. Never discuss competitors or unrelated services.`,
+Always be warm, concise, and professional. Introduce yourself as Aria. Never pretend to be human. Never discuss competitors or unrelated services.`;
+
+      vapiRef.current.start(ASSISTANT_ID, {
+        variableValues: { current_date: today },
+        firstMessage: `Hi, I'm Aria from Xiilio. Today is ${today}. How can I help you?`,
+        model: {
+          provider: "openai" as const,
+          model: "gpt-4o",
+          messages: [{ role: "system" as const, content: systemPrompt }],
+        },
       });
     }
   }, [agentActive]);
