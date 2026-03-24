@@ -29,7 +29,16 @@ const AIDemo = () => {
       }
 
       setAgentActive(true);
-      vapiRef.current.start(ASSISTANT_ID);
+      const today = new Date().toLocaleDateString("en-GB", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      vapiRef.current.start(ASSISTANT_ID, {
+        variableValues: { current_date: today },
+        firstMessage: `Hello! Today is ${today}. How can I help you?`,
+      });
     }
   }, [agentActive]);
 
