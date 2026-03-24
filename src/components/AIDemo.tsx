@@ -35,9 +35,41 @@ const AIDemo = () => {
         month: "long",
         day: "numeric",
       });
+      const systemPrompt = `You are Aria, a friendly and professional AI voice assistant for Xiilio.ai — an enterprise-grade AI marketing agency (tagline: "working 24twelve"). Today's date is ${today}.
+
+YOUR SOLE PURPOSE:
+- Answer questions ONLY about Xiilio, its services, and its team.
+- Book follow-up appointments with a Xiilio team member for the caller.
+- You must NOT discuss topics unrelated to Xiilio. Politely redirect any off-topic questions back to Xiilio's services or booking an appointment.
+
+XIILIO SERVICES:
+- AI-powered lead generation and autonomous marketing
+- Performance marketing and paid media management
+- AI agent deployment for sales and customer engagement
+- Full-funnel strategy and conversion design
+- GDPR-compliant, proprietary shield architecture
+- Rapid 24-48 hour deployment
+
+TEAM MEMBERS (for booking appointments):
+UK-based: Mark, Carl
+USA-based: Nick, Don, CJ, Theo
+
+When booking, ask the caller:
+1. Their name and company
+2. Preferred date and time (remind them today is ${today})
+3. Whether they prefer a UK or USA team member, then suggest available names
+4. Their email for confirmation
+
+Always be warm, concise, and professional. Introduce yourself as Aria. Never pretend to be human. Never discuss competitors or unrelated services.`;
+
       vapiRef.current.start(ASSISTANT_ID, {
         variableValues: { current_date: today },
-        firstMessage: `Hello! Today is ${today}. How can I help you?`,
+        firstMessage: `Hi, I'm Aria from Xiilio. Today is ${today}. How can I help you?`,
+        model: {
+          provider: "openai" as const,
+          model: "gpt-4o",
+          messages: [{ role: "system" as const, content: systemPrompt }],
+        },
       });
     }
   }, [agentActive]);
@@ -55,10 +87,10 @@ const AIDemo = () => {
             Live Demo
           </p>
           <h2 className="font-display text-5xl md:text-7xl mb-4">
-            TALK TO OUR <span className="text-primary">AI AGENT</span>
+            MEET <span className="text-primary">ARIA</span>
           </h2>
           <p className="font-body text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Tap the mic, ask anything about Xiilio — our agent listens, thinks, and speaks back.
+            Tap the mic to speak with Aria — she'll answer your questions about Xiilio and book a call with our team.
           </p>
         </motion.div>
 
@@ -97,7 +129,7 @@ const AIDemo = () => {
                   ? "0 8px 32px -4px hsl(var(--primary) / 0.5), inset 0 -4px 12px hsl(var(--primary) / 0.2), inset 0 4px 8px hsl(0 0% 100% / 0.1)"
                   : "0 8px 32px -4px hsl(var(--primary) / 0.5), 0 2px 8px hsl(0 0% 0% / 0.3), inset 0 -4px 12px hsl(var(--primary) / 0.3), inset 0 4px 8px hsl(0 0% 100% / 0.2)",
               }}
-              aria-label={agentActive ? "Stop voice agent" : "Start voice agent"}
+              aria-label={agentActive ? "Stop Aria" : "Talk to Aria"}
             >
               {agentActive && (
                 <>
@@ -133,7 +165,7 @@ const AIDemo = () => {
 
         <div className="flex justify-center mb-6">
           <p className="font-body text-xs text-muted-foreground uppercase tracking-widest">
-            {agentActive ? "Agent active — speak now" : "Tap to speak"}
+            {agentActive ? "Aria is listening — speak now" : "Tap to speak with Aria"}
           </p>
         </div>
       </div>
