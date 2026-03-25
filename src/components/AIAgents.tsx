@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import agent1 from "@/assets/agent-1.jpg";
-import agent2 from "@/assets/agent-2.jpg";
-import agent3 from "@/assets/agent-3.jpg";
-import agent4 from "@/assets/agent-4.jpg";
-import agent5 from "@/assets/agent-5.jpg";
-import agent6 from "@/assets/agent-6.jpg";
+import agent1 from "@/assets/agent-1.webp";
+import agent2 from "@/assets/agent-2.webp";
+import agent3 from "@/assets/agent-3.webp";
+import agent4 from "@/assets/agent-4.webp";
+import agent5 from "@/assets/agent-5.webp";
+import agent6 from "@/assets/agent-6.webp";
 
 // Each agent gets a unique idle animation pattern + eye position for glow effect
 const agents = [
