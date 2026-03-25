@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import xiilioLogo from "@/assets/xiilio-logo.png";
+import xiilioLogo from "@/assets/xiilio-logo.webp";
 
 const Footer = () => {
   return (
