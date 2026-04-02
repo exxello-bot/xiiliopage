@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Mic, Volume2, CheckCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mic, Volume2, CheckCircle, Calendar, Mail, User } from "lucide-react";
 import { toast } from "sonner";
 import Vapi from "@vapi-ai/web";
 
