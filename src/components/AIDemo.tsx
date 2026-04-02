@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Mic, Volume2 } from "lucide-react";
+import { Mic, Volume2, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 import Vapi from "@vapi-ai/web";
 
 const VAPI_PUBLIC_KEY = "e663a366-f475-4185-875f-d3841fa1a9a4";
