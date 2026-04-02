@@ -25,8 +25,15 @@ async function callCalendlyFunction(action: string, params: Record<string, any> 
   return res.json();
 }
 
+interface BookingConfirmation {
+  name: string;
+  email: string;
+  time: string;
+}
+
 const AIDemo = () => {
   const [agentActive, setAgentActive] = useState(false);
+  const [booking, setBooking] = useState<BookingConfirmation | null>(null);
   const vapiRef = useRef<InstanceType<typeof Vapi> | null>(null);
 
   const toggleAgent = useCallback(() => {
