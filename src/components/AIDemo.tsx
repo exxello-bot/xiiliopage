@@ -65,9 +65,14 @@ const AIDemo = () => {
                   invitee_email: parameters.invitee_email,
                 });
                 if (result && !result.error) {
-                  toast.success("Appointment Booked!", {
+                  toast.success("Appointment Booked! ✅", {
                     description: `Confirmed for ${parameters.invitee_name}. A calendar invite will be sent to ${parameters.invitee_email}.`,
                     duration: 8000,
+                  });
+                } else {
+                  toast.error("Booking Failed", {
+                    description: result?.error || "Something went wrong while booking. Please try again.",
+                    duration: 6000,
                   });
                 }
               }
@@ -82,6 +87,10 @@ const AIDemo = () => {
               });
             } catch (err) {
               console.error("Function call error:", err);
+              toast.error("Booking Error", {
+                description: "Failed to process your booking request. Please try again.",
+                duration: 6000,
+              });
               vapiRef.current?.send({
                 type: "add-message",
                 message: {
