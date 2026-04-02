@@ -69,7 +69,7 @@ const SecurityPlatform = () => (
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-sm bg-primary/10 border border-primary/30 text-primary font-body text-sm hover:bg-primary/20 transition-colors"
         >
           <FileDown className="w-4 h-4" />
-          Download Security & Compliance Guide
+          Download CRM Security Overview
         </a>
       </motion.div>
 
