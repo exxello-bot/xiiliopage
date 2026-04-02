@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Mic, Volume2 } from "lucide-react";
+import { Mic, Volume2, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
 import Vapi from "@vapi-ai/web";
 
 const VAPI_PUBLIC_KEY = "e663a366-f475-4185-875f-d3841fa1a9a4";
@@ -63,6 +64,12 @@ const AIDemo = () => {
                   invitee_name: parameters.invitee_name,
                   invitee_email: parameters.invitee_email,
                 });
+                if (result && !result.error) {
+                  toast.success("Appointment Booked!", {
+                    description: `Confirmed for ${parameters.invitee_name}. A calendar invite will be sent to ${parameters.invitee_email}.`,
+                    duration: 8000,
+                  });
+                }
               }
 
               vapiRef.current?.send({
