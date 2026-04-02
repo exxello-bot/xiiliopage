@@ -90,9 +90,9 @@ XIILIO SERVICES:
 - Rapid 24-48 hour deployment
 
 TEAM MEMBERS (for booking appointments):
-UK-based: Mark, Carl, Maddy
-USA-based: Nick, Don, CJ, Theo
-Asia-based: Seun, Shawn Motunmori
+UK-based: Mark (South Coast), Carl (London), Maddy (South East)
+USA-based: Nick (New York), Don (Arizona), CJ (Texas), Theo (Texas)
+Asia-based: Seun, Shawn Motunmori (Singapore)
 
 BOOKING PROCESS — DIRECT BOOKING VIA FUNCTION CALLS:
 When a caller wants to book an appointment:
