@@ -58,6 +58,7 @@ const Footer = () => {
           <p className="font-body text-xs uppercase tracking-[0.2em] text-primary mb-4 mt-6">Asia Team</p>
           <ul className="space-y-2 font-body text-sm text-muted-foreground">
             <li><span className="text-foreground">Seun</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent">The Samurai.</span></li>
+            <li><span className="text-foreground">Shawn Motunmori</span> — <span className="bg-gradient-to-r from-blue-400 via-slate-400 to-blue-500 bg-clip-text text-transparent"></span></li>
           </ul>
         </div>
       </div>
