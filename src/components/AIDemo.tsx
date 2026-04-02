@@ -137,50 +137,56 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
           provider: "openai" as const,
           model: "gpt-4o",
           messages: [{ role: "system" as const, content: systemPrompt }],
-          functions: [
+          tools: [
             {
-              name: "check_availability",
-              description: "Check available appointment times on Xiilio's calendar for a given date range",
-              parameters: {
-                type: "object" as const,
-                properties: {
-                  start_time: {
-                    type: "string",
-                    description: "Start of the time range in ISO 8601 format (e.g. 2026-04-03T09:00:00Z)",
+              type: "function" as const,
+              function: {
+                name: "check_availability",
+                description: "Check available appointment times on Xiilio's calendar for a given date range",
+                parameters: {
+                  type: "object" as const,
+                  properties: {
+                    start_time: {
+                      type: "string",
+                      description: "Start of the time range in ISO 8601 format (e.g. 2026-04-03T09:00:00Z)",
+                    },
+                    end_time: {
+                      type: "string",
+                      description: "End of the time range in ISO 8601 format (e.g. 2026-04-03T17:00:00Z)",
+                    },
                   },
-                  end_time: {
-                    type: "string",
-                    description: "End of the time range in ISO 8601 format (e.g. 2026-04-03T17:00:00Z)",
-                  },
+                  required: ["start_time", "end_time"],
                 },
-                required: ["start_time", "end_time"],
               },
             },
             {
-              name: "book_appointment",
-              description: "Book an appointment for the caller on Xiilio's calendar",
-              parameters: {
-                type: "object" as const,
-                properties: {
-                  start_time: {
-                    type: "string",
-                    description: "The chosen appointment time in ISO 8601 format",
+              type: "function" as const,
+              function: {
+                name: "book_appointment",
+                description: "Book an appointment for the caller on Xiilio's calendar",
+                parameters: {
+                  type: "object" as const,
+                  properties: {
+                    start_time: {
+                      type: "string",
+                      description: "The chosen appointment time in ISO 8601 format",
+                    },
+                    invitee_name: {
+                      type: "string",
+                      description: "Full name of the person booking the appointment",
+                    },
+                    invitee_email: {
+                      type: "string",
+                      description: "Email address of the person booking the appointment",
+                    },
                   },
-                  invitee_name: {
-                    type: "string",
-                    description: "Full name of the person booking the appointment",
-                  },
-                  invitee_email: {
-                    type: "string",
-                    description: "Email address of the person booking the appointment",
-                  },
+                  required: ["start_time", "invitee_name", "invitee_email"],
                 },
-                required: ["start_time", "invitee_name", "invitee_email"],
               },
             },
-          ],
+          ] as any,
         },
-      });
+      } as any);
     }
   }, [agentActive]);
 
