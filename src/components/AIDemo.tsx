@@ -10,21 +10,6 @@ const ASSISTANT_ID = "503990f1-ec84-494b-91b2-3f013c6c591c";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-const EVENT_TYPE_URI = "https://api.calendly.com/event_types/d1380abd-b59b-4aa0-ba8a-d63cd02aaeae";
-
-async function callCalendlyFunction(action: string, params: Record<string, any> = {}) {
-  const res = await fetch(`${SUPABASE_URL}/functions/v1/calendly-booking`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      "apikey": SUPABASE_ANON_KEY,
-    },
-    body: JSON.stringify({ action, ...params }),
-  });
-  return res.json();
-}
-
 interface BookingConfirmation {
   name: string;
   email: string;
@@ -51,79 +36,45 @@ const AIDemo = () => {
           setAgentActive(false);
         });
 
-        // Handle function calls from Vapi
-        vapiRef.current.on("message", async (message: any) => {
-          if (message.type === "function-call") {
-            const { name, parameters } = message.functionCall;
-            let result: any;
-
-            try {
-              if (name === "check_availability") {
-                result = await callCalendlyFunction("get_available_times", {
-                  event_type_uri: EVENT_TYPE_URI,
-                  start_time: parameters.start_time,
-                  end_time: parameters.end_time,
+        // Listen for tool-calls messages for UI updates (booking confirmation)
+        vapiRef.current.on("message", (message: any) => {
+          console.log("Vapi message:", message);
+          // Listen for transcript to detect booking confirmations
+          if (message.type === "tool-calls") {
+            const toolCalls = message.toolCallList || [];
+            for (const toolCall of toolCalls) {
+              if (toolCall.function?.name === "book_appointment") {
+                const args = typeof toolCall.function.arguments === "string"
+                  ? JSON.parse(toolCall.function.arguments)
+                  : toolCall.function.arguments;
+                setBooking({
+                  name: args.invitee_name,
+                  email: args.invitee_email,
+                  time: args.start_time,
                 });
-              } else if (name === "book_appointment") {
-                result = await callCalendlyFunction("create_booking", {
-                  event_type_uri: EVENT_TYPE_URI,
-                  start_time: parameters.start_time,
-                  invitee_name: parameters.invitee_name,
-                  invitee_email: parameters.invitee_email,
+                toast.success("Appointment Booked! ✅", {
+                  description: `Confirmed for ${args.invitee_name}. A calendar invite will be sent to ${args.invitee_email}.`,
+                  duration: 8000,
                 });
-                if (result && !result.error) {
-                  setBooking({
-                    name: parameters.invitee_name,
-                    email: parameters.invitee_email,
-                    time: parameters.start_time,
-                  });
-                  toast.success("Appointment Booked! ✅", {
-                    description: `Confirmed for ${parameters.invitee_name}. A calendar invite will be sent to ${parameters.invitee_email}.`,
-                    duration: 8000,
-                  });
-                } else {
-                  toast.error("Booking Failed", {
-                    description: result?.error || "Something went wrong while booking. Please try again.",
-                    duration: 6000,
-                  });
-                }
               }
-
-              vapiRef.current?.send({
-                type: "add-message",
-                message: {
-                  role: "function" as const,
-                  name,
-                  content: JSON.stringify(result),
-                },
-              });
-            } catch (err) {
-              console.error("Function call error:", err);
-              toast.error("Booking Error", {
-                description: "Failed to process your booking request. Please try again.",
-                duration: 6000,
-              });
-              vapiRef.current?.send({
-                type: "add-message",
-                message: {
-                  role: "function" as const,
-                  name,
-                  content: JSON.stringify({ error: "Failed to process booking request" }),
-                },
-              });
             }
           }
         });
       }
 
       setAgentActive(true);
-      const today = new Date().toLocaleDateString("en-GB", {
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-GB", {
         weekday: "long",
-        year: "numeric",
-        month: "long",
         day: "numeric",
+        month: "long",
+        year: "numeric",
       });
-      const systemPrompt = `You are Aria, a friendly and professional AI voice assistant for Xiilio.ai — an enterprise-grade AI marketing agency (tagline: "working 24twelve"). Today's date is ${today}.
+
+      const serverUrl = `${SUPABASE_URL}/functions/v1/vapi-webhook`;
+
+      const systemPrompt = `You are Aria, a friendly and professional AI voice assistant for Xiilio.ai — an enterprise-grade AI marketing agency (tagline: "working 24twelve"). Today's date is ${dateStr}.
 
 YOUR SOLE PURPOSE:
 - Answer questions ONLY about Xiilio, its services, and its team.
@@ -159,8 +110,12 @@ IMPORTANT: You book appointments DIRECTLY. Never tell the caller to visit a webs
 Always be warm, concise, and professional. Introduce yourself as Aria. Never pretend to be human. Never discuss competitors or unrelated services.`;
 
       vapiRef.current.start(ASSISTANT_ID, {
-        variableValues: { current_date: today },
-        firstMessage: `Hi, I'm Aria from Xiilio. Today is ${today}. How can I help you?`,
+        variableValues: { current_date: dateStr },
+        firstMessage: `Hi, I'm Aria from Xiilio. How can I help you today?`,
+        server: {
+          url: serverUrl,
+        },
+        clientMessages: ["tool-calls", "transcript", "hang", "function-call", "speech-update", "status-update"],
         model: {
           provider: "openai" as const,
           model: "gpt-4o",
@@ -327,7 +282,6 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
               className="max-w-md mx-auto"
             >
               <div className="relative rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-6 shadow-lg overflow-hidden">
-                {/* Glow accent */}
                 <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-primary/10 blur-2xl" />
 
                 <div className="flex items-center gap-3 mb-4">
