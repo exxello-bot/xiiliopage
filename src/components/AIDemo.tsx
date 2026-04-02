@@ -6,17 +6,33 @@ import Vapi from "@vapi-ai/web";
 const VAPI_PUBLIC_KEY = "e663a366-f475-4185-875f-d3841fa1a9a4";
 const ASSISTANT_ID = "503990f1-ec84-494b-91b2-3f013c6c591c";
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+const EVENT_TYPE_URI = "https://api.calendly.com/event_types/d1380abd-b59b-4aa0-ba8a-d63cd02aaeae";
+
+async function callCalendlyFunction(action: string, params: Record<string, any> = {}) {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/calendly-booking`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "apikey": SUPABASE_ANON_KEY,
+    },
+    body: JSON.stringify({ action, ...params }),
+  });
+  return res.json();
+}
+
 const AIDemo = () => {
   const [agentActive, setAgentActive] = useState(false);
   const vapiRef = useRef<InstanceType<typeof Vapi> | null>(null);
 
   const toggleAgent = useCallback(() => {
     if (agentActive) {
-      // Stop the call
       vapiRef.current?.stop();
       setAgentActive(false);
     } else {
-      // Start inline voice call
       if (!vapiRef.current) {
         vapiRef.current = new Vapi(VAPI_PUBLIC_KEY);
 
@@ -25,6 +41,50 @@ const AIDemo = () => {
         vapiRef.current.on("error", (err) => {
           console.error("Vapi error:", err);
           setAgentActive(false);
+        });
+
+        // Handle function calls from Vapi
+        vapiRef.current.on("message", async (message: any) => {
+          if (message.type === "function-call") {
+            const { name, parameters } = message.functionCall;
+            let result: any;
+
+            try {
+              if (name === "check_availability") {
+                result = await callCalendlyFunction("get_available_times", {
+                  event_type_uri: EVENT_TYPE_URI,
+                  start_time: parameters.start_time,
+                  end_time: parameters.end_time,
+                });
+              } else if (name === "book_appointment") {
+                result = await callCalendlyFunction("create_booking", {
+                  event_type_uri: EVENT_TYPE_URI,
+                  start_time: parameters.start_time,
+                  invitee_name: parameters.invitee_name,
+                  invitee_email: parameters.invitee_email,
+                });
+              }
+
+              vapiRef.current?.send({
+                type: "add-message",
+                message: {
+                  role: "function" as const,
+                  name,
+                  content: JSON.stringify(result),
+                },
+              });
+            } catch (err) {
+              console.error("Function call error:", err);
+              vapiRef.current?.send({
+                type: "add-message",
+                message: {
+                  role: "function" as const,
+                  name,
+                  content: JSON.stringify({ error: "Failed to process booking request" }),
+                },
+              });
+            }
+          }
         });
       }
 
@@ -39,7 +99,7 @@ const AIDemo = () => {
 
 YOUR SOLE PURPOSE:
 - Answer questions ONLY about Xiilio, its services, and its team.
-- Book follow-up appointments with a Xiilio team member for the caller.
+- Book follow-up appointments with a Xiilio team member for the caller DIRECTLY — do NOT tell them to visit a link.
 - You must NOT discuss topics unrelated to Xiilio. Politely redirect any off-topic questions back to Xiilio's services or booking an appointment.
 
 XIILIO SERVICES:
@@ -55,14 +115,18 @@ UK-based: Mark, Carl, Maddy
 USA-based: Nick, Don, CJ, Theo
 Asia-based: Seun, Shawn Motunmori
 
-BOOKING PROCESS — CALENDLY DIRECT BOOKING:
-The official booking link is: https://calendly.com/letsgo-xiilio/30min
+BOOKING PROCESS — DIRECT BOOKING VIA FUNCTION CALLS:
 When a caller wants to book an appointment:
-1. Ask their name and company
-2. Ask whether they prefer a UK, USA, or Asia team member, then suggest available names
-3. Direct them to book directly at: https://calendly.com/letsgo-xiilio/30min
-4. Let them know the link is also available on the website under "Book a Call"
-5. Emphasize that the Calendly link allows them to pick a date and time that works for them instantly
+1. Ask their full name and email address (required for booking)
+2. Ask their company name (optional but helpful)
+3. Ask whether they prefer a UK, USA, or Asia team member, then suggest available names
+4. Ask what date and time works best for them
+5. Use the check_availability function to find available slots around their preferred time
+6. Present the available times and confirm their choice
+7. Use the book_appointment function to complete the booking
+8. Confirm the booking is done and they'll receive a calendar invite at their email
+
+IMPORTANT: You book appointments DIRECTLY. Never tell the caller to visit a website or link. You handle everything.
 
 Always be warm, concise, and professional. Introduce yourself as Aria. Never pretend to be human. Never discuss competitors or unrelated services.`;
 
@@ -73,6 +137,48 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
           provider: "openai" as const,
           model: "gpt-4o",
           messages: [{ role: "system" as const, content: systemPrompt }],
+          functions: [
+            {
+              name: "check_availability",
+              description: "Check available appointment times on Xiilio's calendar for a given date range",
+              parameters: {
+                type: "object" as const,
+                properties: {
+                  start_time: {
+                    type: "string",
+                    description: "Start of the time range in ISO 8601 format (e.g. 2026-04-03T09:00:00Z)",
+                  },
+                  end_time: {
+                    type: "string",
+                    description: "End of the time range in ISO 8601 format (e.g. 2026-04-03T17:00:00Z)",
+                  },
+                },
+                required: ["start_time", "end_time"],
+              },
+            },
+            {
+              name: "book_appointment",
+              description: "Book an appointment for the caller on Xiilio's calendar",
+              parameters: {
+                type: "object" as const,
+                properties: {
+                  start_time: {
+                    type: "string",
+                    description: "The chosen appointment time in ISO 8601 format",
+                  },
+                  invitee_name: {
+                    type: "string",
+                    description: "Full name of the person booking the appointment",
+                  },
+                  invitee_email: {
+                    type: "string",
+                    description: "Email address of the person booking the appointment",
+                  },
+                },
+                required: ["start_time", "invitee_name", "invitee_email"],
+              },
+            },
+          ],
         },
       });
     }
