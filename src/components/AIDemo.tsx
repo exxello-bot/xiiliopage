@@ -64,6 +64,12 @@ const AIDemo = () => {
                   invitee_name: parameters.invitee_name,
                   invitee_email: parameters.invitee_email,
                 });
+                if (result && !result.error) {
+                  toast.success("Appointment Booked!", {
+                    description: `Confirmed for ${parameters.invitee_name}. A calendar invite will be sent to ${parameters.invitee_email}.`,
+                    duration: 8000,
+                  });
+                }
               }
 
               vapiRef.current?.send({
