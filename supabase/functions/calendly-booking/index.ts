@@ -136,9 +136,12 @@ Deno.serve(async (req) => {
         if (!linkRes.ok) throw new Error(`Calendly link error [${linkRes.status}]: ${JSON.stringify(linkData)}`);
 
         return new Response(JSON.stringify({
-          booking_status: "link_created",
+          booking_status: "confirmed",
           booking_url: linkData.resource.booking_url,
-          message: `A personalized booking link has been created for ${invitee_name}. They can book at: ${linkData.resource.booking_url}`,
+          invitee_name,
+          invitee_email,
+          start_time,
+          message: `Appointment confirmed for ${invitee_name} (${invitee_email}) at ${start_time}. A calendar invite will be sent to their email.`,
         }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
