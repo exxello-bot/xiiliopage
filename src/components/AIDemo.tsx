@@ -315,6 +315,65 @@ Always be warm, concise, and professional. Introduce yourself as Aria. Never pre
             {agentActive ? "Aria is listening — speak now" : "Tap to speak with Aria"}
           </p>
         </div>
+
+        {/* Booking confirmation card */}
+        <AnimatePresence>
+          {booking && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="max-w-md mx-auto"
+            >
+              <div className="relative rounded-2xl border border-primary/20 bg-card/80 backdrop-blur-md p-6 shadow-lg overflow-hidden">
+                {/* Glow accent */}
+                <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-primary/10 blur-2xl" />
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg text-foreground">Appointment Confirmed</h3>
+                    <p className="font-body text-xs text-muted-foreground">Calendar invite on the way</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm font-body text-foreground/80">
+                    <User className="w-4 h-4 text-primary/70" />
+                    <span>{booking.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-body text-foreground/80">
+                    <Mail className="w-4 h-4 text-primary/70" />
+                    <span>{booking.email}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-body text-foreground/80">
+                    <Calendar className="w-4 h-4 text-primary/70" />
+                    <span>
+                      {new Date(booking.time).toLocaleString("en-GB", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setBooking(null)}
+                  className="mt-4 w-full py-2 rounded-lg border border-border/50 text-xs font-body text-muted-foreground hover:text-foreground hover:border-border transition-colors"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
