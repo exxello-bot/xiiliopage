@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Send, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
