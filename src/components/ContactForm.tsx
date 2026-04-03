@@ -7,6 +7,53 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+declare global {
+  interface Window {
+    Calendly?: {
+      initInlineWidget: (opts: {
+        url: string;
+        parentElement: HTMLElement;
+        prefill?: Record<string, string>;
+        utm?: Record<string, string>;
+      }) => void;
+    };
+  }
+}
+
+const CalendlyInlineWidget = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const init = () => {
+      if (containerRef.current && window.Calendly) {
+        containerRef.current.innerHTML = "";
+        window.Calendly.initInlineWidget({
+          url: "https://calendly.com/letsgo-xiilio/30min?hide_gdpr_banner=1&background_color=1a1a2e&text_color=ffffff&primary_color=00e5ff",
+          parentElement: containerRef.current,
+        });
+      }
+    };
+
+    if (window.Calendly) {
+      init();
+    } else {
+      const interval = setInterval(() => {
+        if (window.Calendly) {
+          clearInterval(interval);
+          init();
+        }
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  return (
+    <div className="rounded-sm overflow-hidden border border-border">
+      <div ref={containerRef} style={{ minHeight: 580, width: "100%" }} />
+    </div>
+  );
+};
+
 const ContactForm = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
