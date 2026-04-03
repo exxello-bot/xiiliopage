@@ -152,16 +152,7 @@ const ContactForm = () => {
               </Button>
             </form>
           ) : (
-            <div className="bg-card border border-border rounded-sm p-6 text-center">
-              <div className="rounded-sm overflow-hidden">
-                <iframe
-                  src="https://calendly.com/letsgo-xiilio/30min"
-                  className="w-full h-[500px] border-0"
-                  title="Book a Strategy Call"
-                  loading="lazy"
-                />
-              </div>
-            </div>
+            <CalendlyInlineWidget />
           )}
         </motion.div>
       </div>
