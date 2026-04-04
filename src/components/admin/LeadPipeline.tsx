@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { MessageSquare } from "lucide-react";
 
 const STAGES = ["inbox", "discovery", "demo", "negotiation", "closed"];
 
@@ -21,6 +22,7 @@ interface LeadPipelineProps {
   leads: Lead[];
   onSelect: (lead: Lead) => void;
   onUpdate: (id: string, field: string, value: string | number) => void;
+  messageCounts?: Record<string, number>;
 }
 
 const stageColors: Record<string, string> = {
