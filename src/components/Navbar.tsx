@@ -8,6 +8,7 @@ const links = [
   { label: "Pricing", href: "#pricing" },
   { label: "Security", href: "#security" },
   { label: "AI Demo", href: "#ai-demo" },
+  { label: "Portal", href: "/portal" },
 ];
 
 const Navbar = () => {

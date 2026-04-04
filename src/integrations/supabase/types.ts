@@ -119,6 +119,65 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender_role: string
+          submission_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender_role: string
+          submission_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender_role?: string
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_messages_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "contact_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

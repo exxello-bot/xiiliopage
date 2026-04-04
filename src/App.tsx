@@ -12,7 +12,10 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService.tsx"));
 const Install = lazy(() => import("./pages/Install.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
+const Signup = lazy(() => import("./pages/Signup.tsx"));
 const Admin = lazy(() => import("./pages/Admin.tsx"));
+const Portal = lazy(() => import("./pages/Portal.tsx"));
+const InquiryDetail = lazy(() => import("./pages/InquiryDetail.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -36,7 +39,10 @@ const App = () => (
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/install" element={<Install />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/portal" element={<Portal />} />
+              <Route path="/portal/inquiry/:id" element={<InquiryDetail />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
