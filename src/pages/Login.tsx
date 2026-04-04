@@ -92,6 +92,11 @@ const Login = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Signing in..." : "Sign In"}
             </Button>
+            <p className="text-center text-sm">
+              <Link to="/forgot-password" className="text-primary hover:underline">
+                Forgot your password?
+              </Link>
+            </p>
           </form>
           {mode === "customer" && (
             <p className="text-center text-sm text-muted-foreground mt-4">
