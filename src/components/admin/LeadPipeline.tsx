@@ -77,7 +77,15 @@ const LeadPipeline = ({ leads, onSelect, onUpdate, messageCounts = {} }: LeadPip
                       <Badge variant="outline" className="text-xs capitalize">
                         {lead.status.replace("_", " ")}
                       </Badge>
-                      <span className="text-xs text-primary font-medium">{lead.score}pts</span>
+                      <div className="flex items-center gap-2">
+                        {messageCounts[lead.id] > 0 && (
+                          <span className="flex items-center gap-0.5 text-xs text-primary font-medium">
+                            <MessageSquare className="h-3 w-3" />
+                            {messageCounts[lead.id]}
+                          </span>
+                        )}
+                        <span className="text-xs text-primary font-medium">{lead.score}pts</span>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

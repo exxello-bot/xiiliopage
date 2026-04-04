@@ -165,7 +165,7 @@ const Admin = () => {
           </TabsList>
 
           <TabsContent value="pipeline" className="mt-4">
-            <LeadPipeline leads={leads} onSelect={handleSelect} onUpdate={handleUpdate} />
+            <LeadPipeline leads={leads} onSelect={handleSelect} onUpdate={handleUpdate} messageCounts={messageCounts} />
           </TabsContent>
 
           <TabsContent value="table" className="mt-4">
