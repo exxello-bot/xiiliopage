@@ -27,9 +27,32 @@ interface Lead {
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAdminAuth();
+  const { theme, setTheme } = useTheme();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  const exportCSV = () => {
+    if (leads.length === 0) {
+      toast.error("No leads to export");
+      return;
+    }
+    const headers = ["Name", "Email", "Company", "Status", "Score", "Stage", "Assigned To", "Notes", "Message", "Created At"];
+    const rows = leads.map(l => [
+      l.name, l.email, l.company || "", l.status, l.score, l.stage,
+      l.assigned_to || "", (l.notes || "").replace(/"/g, '""'), l.message.replace(/"/g, '""'),
+      new Date(l.created_at).toLocaleString()
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("CSV exported");
+  };
 
   const fetchLeads = useCallback(async () => {
     const { data, error } = await supabase
