@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogOut, LayoutGrid, Table as TableIcon } from "lucide-react";
+import { LogOut, LayoutGrid, Table as TableIcon, Sun, Moon, Download } from "lucide-react";
+import { useTheme } from "next-themes";
 import LeadStats from "@/components/admin/LeadStats";
 import LeadTable from "@/components/admin/LeadTable";
 import LeadPipeline from "@/components/admin/LeadPipeline";
@@ -26,9 +27,32 @@ interface Lead {
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAdminAuth();
+  const { theme, setTheme } = useTheme();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  const exportCSV = () => {
+    if (leads.length === 0) {
+      toast.error("No leads to export");
+      return;
+    }
+    const headers = ["Name", "Email", "Company", "Status", "Score", "Stage", "Assigned To", "Notes", "Message", "Created At"];
+    const rows = leads.map(l => [
+      l.name, l.email, l.company || "", l.status, l.score, l.stage,
+      l.assigned_to || "", (l.notes || "").replace(/"/g, '""'), l.message.replace(/"/g, '""'),
+      new Date(l.created_at).toLocaleString()
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("CSV exported");
+  };
 
   const fetchLeads = useCallback(async () => {
     const { data, error } = await supabase
@@ -92,9 +116,21 @@ const Admin = () => {
           <h1 className="text-xl font-display text-foreground">Lead Dashboard</h1>
           <p className="text-sm text-muted-foreground">{user?.email}</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={signOut}>
-          <LogOut className="h-4 w-4 mr-2" /> Sign Out
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={exportCSV}>
+            <Download className="h-4 w-4 mr-2" /> Export CSV
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <Button variant="ghost" size="sm" onClick={signOut}>
+            <LogOut className="h-4 w-4 mr-2" /> Sign Out
+          </Button>
+        </div>
       </header>
 
       <main className="p-6 space-y-6 max-w-[1600px] mx-auto">
