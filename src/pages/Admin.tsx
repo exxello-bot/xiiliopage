@@ -83,10 +83,35 @@ const Admin = () => {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) {
-      fetchLeads();
-      fetchMessageCounts();
-    }
+    if (!isAdmin) return;
+
+    fetchLeads();
+    fetchMessageCounts();
+
+    // Real-time: new/updated leads
+    const leadsChannel = supabase
+      .channel("admin-leads")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "contact_submissions" },
+        () => fetchLeads()
+      )
+      .subscribe();
+
+    // Real-time: new messages
+    const messagesChannel = supabase
+      .channel("admin-messages")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "customer_messages" },
+        () => fetchMessageCounts()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(leadsChannel);
+      supabase.removeChannel(messagesChannel);
+    };
   }, [isAdmin, fetchLeads, fetchMessageCounts]);
 
   const handleUpdate = async (id: string, field: string, value: string | number) => {
