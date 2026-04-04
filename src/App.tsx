@@ -10,6 +10,8 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.tsx"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService.tsx"));
 const Install = lazy(() => import("./pages/Install.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const Login = lazy(() => import("./pages/Login.tsx"));
+const Admin = lazy(() => import("./pages/Admin.tsx"));
 
 const queryClient = new QueryClient();
 
