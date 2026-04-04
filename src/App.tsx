@@ -41,9 +41,10 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-        </BrowserRouter>
-      </SentryErrorBoundary>
-    </TooltipProvider>
+          </BrowserRouter>
+        </SentryErrorBoundary>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
