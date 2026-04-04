@@ -1,57 +1,51 @@
 
 
-## CRM-Style Lead Capture Dashboard
+## Customer Portal
 
 ### Overview
-Build a password-protected admin dashboard at `/admin` where you can view, filter, and manage all leads captured through the contact form. Leads will have pipeline stages, scores, statuses, and notes — a functional CRM built on top of the existing `contact_submissions` table.
+Build a customer-facing portal at `/portal` where people who submitted a contact form can log in, track the status of their inquiry, and communicate with the Xiilio team. Customers sign up with email/password, and their account is linked to their contact submission via email matching.
 
-### Step 1: Add Authentication
-- Create login page at `/login` with email/password auth
-- Create a `user_roles` table with an `admin` role to restrict dashboard access
-- No signup flow — admin accounts created manually via the database
+### Step 1: Database Changes
+- Create a `profiles` table (id, user_id FK to auth.users, full_name, avatar_url, created_at) with auto-creation trigger on signup
+- Add a `customer_messages` table for threaded communication between customer and admin (id, submission_id FK, sender_role text, content text, created_at)
+- Enable realtime on `customer_messages` for live chat updates
+- RLS: customers can only read their own linked submissions and messages; admins can read/write all
 
-### Step 2: Extend the Database
-Add new columns to `contact_submissions` via migration:
-- `status` (text, default `'new'`) — New Lead, Contacted, Qualified, Proposal Sent, Won, Lost
-- `score` (integer, default `0`) — lead score 0–100
-- `stage` (text, default `'inbox'`) — Inbox, Discovery, Demo, Negotiation, Closed
-- `notes` (text, nullable) — internal notes
-- `assigned_to` (text, nullable) — team member name
+### Step 2: Customer Authentication
+- Re-enable public signups (customers need to register)
+- Update `/login` page with a tab or toggle: **Admin Login** vs **Customer Login**
+- Add a `/signup` page for customers (name, email, password)
+- Add email confirmation flow
+- After signup, auto-link the customer's account to any existing `contact_submissions` matching their email
+- Create a `useCustomerAuth` hook that checks if the user has a profile but is NOT an admin
 
-Create a `user_roles` table for admin access control with RLS.
+### Step 3: Customer Portal Pages
+**`/portal` — Dashboard**
+- Show all submissions linked to the customer's email
+- Each submission card shows: status badge, stage, date submitted, last update
+- Click to open detail view
 
-### Step 3: Build the Dashboard
-Create `/admin` route with sidebar layout:
+**`/portal/inquiry/:id` — Inquiry Detail**
+- Full view of the original submission (name, company, message)
+- Current status and stage displayed as a progress tracker (Inbox → Discovery → Demo → Negotiation → Closed)
+- Message thread: customer and admin can exchange messages in real time
+- Customer can add follow-up notes
 
-**Pipeline Board View**
-- Kanban-style columns by stage (Inbox → Discovery → Demo → Negotiation → Closed)
-- Drag-and-drop cards showing name, company, score, status
-- Click to open lead detail panel
+### Step 4: Admin Side Updates
+- Add a "Messages" tab or indicator in `LeadDetail` so admins can reply to customer messages from the CRM
+- Show unread message count on lead cards in the pipeline
 
-**Table View**
-- Sortable/filterable table of all leads
-- Columns: Name, Email, Company, Status, Score, Stage, Date, Assigned To
-- Inline status/stage dropdowns for quick updates
-- Search bar filtering by name, email, or company
-
-**Lead Detail Panel**
-- Side panel or modal with full lead info
-- Edit score, status, stage, notes, assignment
-- View original message
-- Timeline of status changes
-
-**Stats Header**
-- Total leads, new this week, qualified count, conversion rate
-
-### Step 4: Update Edge Functions
-- Modify `submit-contact` to use the new default column values
-- Add an `update-lead` edge function for updating lead status, score, stage, notes (admin-only, JWT-verified)
+### Step 5: Navigation
+- Add "Portal" link to the main site Navbar (next to existing nav items)
+- After login, redirect customers to `/portal` (not `/admin`)
+- After login, redirect admins to `/admin` (existing behavior)
 
 ### Technical Details
-- **New pages**: `/login`, `/admin`
-- **New components**: `AdminLayout`, `LeadPipeline`, `LeadTable`, `LeadDetail`, `LeadStats`
-- **Database changes**: Alter `contact_submissions` (add columns), create `user_roles` table
-- **Auth**: Email/password login, role-based access via `has_role()` function
-- **RLS**: Admin-only read/update on `contact_submissions`, service_role insert preserved
-- **New edge function**: `update-lead` for PATCH operations on leads
+- **New tables**: `profiles`, `customer_messages`
+- **New pages**: `/signup`, `/portal`, `/portal/inquiry/:id`
+- **Modified pages**: `/login` (dual-mode), Admin `LeadDetail` (message thread)
+- **New components**: `CustomerPortal`, `InquiryDetail`, `MessageThread`, `StatusTracker`
+- **Auth changes**: Enable public signups, add email confirmation
+- **RLS policies**: Customer sees only own data; admin sees all
+- **Realtime**: `customer_messages` for live messaging
 
