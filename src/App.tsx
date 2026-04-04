@@ -13,6 +13,8 @@ const Install = lazy(() => import("./pages/Install.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Signup = lazy(() => import("./pages/Signup.tsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const Admin = lazy(() => import("./pages/Admin.tsx"));
 const Portal = lazy(() => import("./pages/Portal.tsx"));
 const InquiryDetail = lazy(() => import("./pages/InquiryDetail.tsx"));
@@ -40,6 +42,8 @@ const App = () => (
               <Route path="/install" element={<Install />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/portal" element={<Portal />} />
               <Route path="/portal/inquiry/:id" element={<InquiryDetail />} />
