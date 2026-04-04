@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SentryErrorBoundary } from "@/components/ErrorBoundary";
+import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index.tsx";
 
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.tsx"));
