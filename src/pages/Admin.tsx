@@ -31,6 +31,7 @@ const Admin = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [messageCounts, setMessageCounts] = useState<Record<string, number>>({});
 
   const exportCSV = () => {
     if (leads.length === 0) {
@@ -67,9 +68,26 @@ const Admin = () => {
     }
   }, []);
 
+  const fetchMessageCounts = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("customer_messages")
+      .select("submission_id");
+
+    if (!error && data) {
+      const counts: Record<string, number> = {};
+      data.forEach((m) => {
+        counts[m.submission_id] = (counts[m.submission_id] || 0) + 1;
+      });
+      setMessageCounts(counts);
+    }
+  }, []);
+
   useEffect(() => {
-    if (isAdmin) fetchLeads();
-  }, [isAdmin, fetchLeads]);
+    if (isAdmin) {
+      fetchLeads();
+      fetchMessageCounts();
+    }
+  }, [isAdmin, fetchLeads, fetchMessageCounts]);
 
   const handleUpdate = async (id: string, field: string, value: string | number) => {
     const { error } = await supabase
@@ -147,7 +165,7 @@ const Admin = () => {
           </TabsList>
 
           <TabsContent value="pipeline" className="mt-4">
-            <LeadPipeline leads={leads} onSelect={handleSelect} onUpdate={handleUpdate} />
+            <LeadPipeline leads={leads} onSelect={handleSelect} onUpdate={handleUpdate} messageCounts={messageCounts} />
           </TabsContent>
 
           <TabsContent value="table" className="mt-4">

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { MessageSquare } from "lucide-react";
 
 const STAGES = ["inbox", "discovery", "demo", "negotiation", "closed"];
 
@@ -21,6 +22,7 @@ interface LeadPipelineProps {
   leads: Lead[];
   onSelect: (lead: Lead) => void;
   onUpdate: (id: string, field: string, value: string | number) => void;
+  messageCounts?: Record<string, number>;
 }
 
 const stageColors: Record<string, string> = {
@@ -31,7 +33,7 @@ const stageColors: Record<string, string> = {
   closed: "border-emerald-500/30",
 };
 
-const LeadPipeline = ({ leads, onSelect, onUpdate }: LeadPipelineProps) => {
+const LeadPipeline = ({ leads, onSelect, onUpdate, messageCounts = {} }: LeadPipelineProps) => {
   const handleDragStart = (e: React.DragEvent, leadId: string) => {
     e.dataTransfer.setData("leadId", leadId);
   };
@@ -75,7 +77,15 @@ const LeadPipeline = ({ leads, onSelect, onUpdate }: LeadPipelineProps) => {
                       <Badge variant="outline" className="text-xs capitalize">
                         {lead.status.replace("_", " ")}
                       </Badge>
-                      <span className="text-xs text-primary font-medium">{lead.score}pts</span>
+                      <div className="flex items-center gap-2">
+                        {messageCounts[lead.id] > 0 && (
+                          <span className="flex items-center gap-0.5 text-xs text-primary font-medium">
+                            <MessageSquare className="h-3 w-3" />
+                            {messageCounts[lead.id]}
+                          </span>
+                        )}
+                        <span className="text-xs text-primary font-medium">{lead.score}pts</span>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
