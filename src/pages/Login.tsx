@@ -4,15 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<"customer" | "admin">("customer");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -25,7 +24,7 @@ const Login = () => {
       return;
     }
 
-    // Check if admin
+    // Check role and redirect
     const { data: roleData } = await supabase
       .from("user_roles")
       .select("role")
@@ -33,79 +32,85 @@ const Login = () => {
       .eq("role", "admin")
       .maybeSingle();
 
-    if (mode === "admin") {
-      if (roleData) {
-        navigate("/admin");
-      } else {
-        toast.error("You don't have admin access.");
-        await supabase.auth.signOut();
-      }
+    if (roleData) {
+      navigate("/admin", { replace: true });
     } else {
-      if (roleData) {
-        navigate("/admin");
-      } else {
-        navigate("/portal");
-      }
+      navigate("/home", { replace: true });
     }
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md border-border">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-display text-foreground">Welcome Back</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Sign in to your account
-          </CardDescription>
-          <Tabs value={mode} onValueChange={(v) => setMode(v as "customer" | "admin")} className="mt-4">
-            <TabsList className="w-full">
-              <TabsTrigger value="customer" className="flex-1">Customer</TabsTrigger>
-              <TabsTrigger value="admin" className="flex-1">Admin</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-secondary border-border text-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
+    <div className="min-h-screen flex flex-col bg-background px-6 pt-[env(safe-area-inset-top)]">
+      {/* Brand header */}
+      <div className="flex flex-col items-center pt-16 pb-10">
+        <h1 className="font-display text-5xl text-primary tracking-wider">XIILIO</h1>
+        <p className="text-muted-foreground text-sm font-body mt-2">Digital Growth Platform</p>
+      </div>
+
+      {/* Form */}
+      <div className="flex-1 flex flex-col max-w-sm w-full mx-auto">
+        <h2 className="font-display text-2xl text-foreground mb-6">Welcome back</h2>
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-foreground text-sm">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="bg-secondary border-border text-foreground h-12 rounded-xl"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-foreground text-sm">Password</Label>
+            <div className="relative">
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-secondary border-border text-foreground"
+                className="bg-secondary border-border text-foreground h-12 rounded-xl pr-12"
+                placeholder="••••••••"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground p-1"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
-            </Button>
-            <p className="text-center text-sm">
-              <Link to="/forgot-password" className="text-primary hover:underline">
-                Forgot your password?
-              </Link>
-            </p>
-          </form>
-          {mode === "customer" && (
-            <p className="text-center text-sm text-muted-foreground mt-4">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-primary hover:underline">Sign up</Link>
-            </p>
-          )}
-        </CardContent>
-      </Card>
+          </div>
+
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-primary text-sm hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+
+          <Button type="submit" className="w-full h-12 rounded-xl text-base font-medium" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary font-medium hover:underline">Sign up</Link>
+          </p>
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link to="/explore" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Continue as Guest →
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

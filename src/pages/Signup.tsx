@@ -4,13 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ const Signup = () => {
       password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: window.location.origin + "/portal",
+        emailRedirectTo: window.location.origin + "/home",
       },
     });
     if (error) {
@@ -39,60 +40,82 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md border-border">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-display text-foreground">Create Account</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Sign up to track your inquiries with Xiilio
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name" className="text-foreground">Full Name</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="bg-secondary border-border text-foreground"
-                placeholder="Your name"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-secondary border-border text-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
+    <div className="min-h-screen flex flex-col bg-background px-6 pt-[env(safe-area-inset-top)]">
+      {/* Brand header */}
+      <div className="flex flex-col items-center pt-16 pb-10">
+        <h1 className="font-display text-5xl text-primary tracking-wider">XIILIO</h1>
+        <p className="text-muted-foreground text-sm font-body mt-2">Digital Growth Platform</p>
+      </div>
+
+      {/* Form */}
+      <div className="flex-1 flex flex-col max-w-sm w-full mx-auto">
+        <h2 className="font-display text-2xl text-foreground mb-6">Create account</h2>
+
+        <form onSubmit={handleSignup} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-foreground text-sm">Full Name</Label>
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="bg-secondary border-border text-foreground h-12 rounded-xl"
+              placeholder="Your name"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-foreground text-sm">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="bg-secondary border-border text-foreground h-12 rounded-xl"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-foreground text-sm">Password</Label>
+            <div className="relative">
               <Input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
-                className="bg-secondary border-border text-foreground"
+                className="bg-secondary border-border text-foreground h-12 rounded-xl pr-12"
+                placeholder="Min 6 characters"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground p-1"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Sign Up"}
-            </Button>
-          </form>
-          <p className="text-center text-sm text-muted-foreground mt-4">
+          </div>
+
+          <Button type="submit" className="w-full h-12 rounded-xl text-base font-medium" disabled={loading}>
+            {loading ? "Creating account..." : "Sign Up"}
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:underline">Log in</Link>
+            <Link to="/login" className="text-primary font-medium hover:underline">Log in</Link>
           </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link to="/explore" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            Continue as Guest →
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
