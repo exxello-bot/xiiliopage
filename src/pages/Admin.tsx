@@ -83,8 +83,11 @@ const Admin = () => {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) fetchLeads();
-  }, [isAdmin, fetchLeads]);
+    if (isAdmin) {
+      fetchLeads();
+      fetchMessageCounts();
+    }
+  }, [isAdmin, fetchLeads, fetchMessageCounts]);
 
   const handleUpdate = async (id: string, field: string, value: string | number) => {
     const { error } = await supabase
