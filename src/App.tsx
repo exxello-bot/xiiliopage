@@ -13,6 +13,8 @@ const Install = lazy(() => import("./pages/Install.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Signup = lazy(() => import("./pages/Signup.tsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const Admin = lazy(() => import("./pages/Admin.tsx"));
 const Portal = lazy(() => import("./pages/Portal.tsx"));
 const InquiryDetail = lazy(() => import("./pages/InquiryDetail.tsx"));
