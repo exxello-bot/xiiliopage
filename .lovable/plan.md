@@ -1,51 +1,42 @@
 
 
-## Customer Portal
+## Make It a Mobile-First App Experience
 
 ### Overview
-Build a customer-facing portal at `/portal` where people who submitted a contact form can log in, track the status of their inquiry, and communicate with the Xiilio team. Customers sign up with email/password, and their account is linked to their contact submission via email matching.
+Transform the app so login/signup is the first thing users see (like a native mobile app), with a bottom tab navigation for the main app experience after authentication. The landing page content moves behind auth, and the UI gets mobile-app styling (bottom nav bar, no desktop navbar, safe area insets).
 
-### Step 1: Database Changes
-- Create a `profiles` table (id, user_id FK to auth.users, full_name, avatar_url, created_at) with auto-creation trigger on signup
-- Add a `customer_messages` table for threaded communication between customer and admin (id, submission_id FK, sender_role text, content text, created_at)
-- Enable realtime on `customer_messages` for live chat updates
-- RLS: customers can only read their own linked submissions and messages; admins can read/write all
+### Step 1: Auth-First Routing
+- Change `/` to redirect to `/login` if not authenticated, or to the main app shell if authenticated
+- Keep the landing page content accessible at `/explore` or similar for marketing (optional)
+- Add an auth guard wrapper component that checks session state and redirects unauthenticated users to `/login`
 
-### Step 2: Customer Authentication
-- Re-enable public signups (customers need to register)
-- Update `/login` page with a tab or toggle: **Admin Login** vs **Customer Login**
-- Add a `/signup` page for customers (name, email, password)
-- Add email confirmation flow
-- After signup, auto-link the customer's account to any existing `contact_submissions` matching their email
-- Create a `useCustomerAuth` hook that checks if the user has a profile but is NOT an admin
+### Step 2: Redesign Login & Signup for Mobile
+- Make login/signup pages full-screen, mobile-native feeling with the Xiilio brand logo at top
+- Add smooth transitions between login ↔ signup
+- Remove the admin/customer toggle from login (simplify — role detection happens automatically after login)
+- Add "Continue as Guest" option to browse the landing page without logging in
 
-### Step 3: Customer Portal Pages
-**`/portal` — Dashboard**
-- Show all submissions linked to the customer's email
-- Each submission card shows: status badge, stage, date submitted, last update
-- Click to open detail view
+### Step 3: Create App Shell with Bottom Tab Navigation
+After login, users land in a mobile app shell with 4 bottom tabs:
+- **Home** — Dashboard/portal showing inquiry status cards
+- **Chat** — AI chat with Aria + message threads
+- **Services** — Browse Xiilio's service offerings
+- **Profile** — Account settings, sign out, app info
 
-**`/portal/inquiry/:id` — Inquiry Detail**
-- Full view of the original submission (name, company, message)
-- Current status and stage displayed as a progress tracker (Inbox → Discovery → Demo → Negotiation → Closed)
-- Message thread: customer and admin can exchange messages in real time
-- Customer can add follow-up notes
+### Step 4: Mobile-Optimized UI
+- Add a `MobileAppShell` layout component with bottom `TabBar`
+- Use `safe-area-inset` padding for notch/home-indicator devices
+- Hide the desktop `Navbar` when inside the app shell
+- Add page transition animations for a native feel
+- Ensure all pages use mobile-friendly touch targets (min 44px)
 
-### Step 4: Admin Side Updates
-- Add a "Messages" tab or indicator in `LeadDetail` so admins can reply to customer messages from the CRM
-- Show unread message count on lead cards in the pipeline
-
-### Step 5: Navigation
-- Add "Portal" link to the main site Navbar (next to existing nav items)
-- After login, redirect customers to `/portal` (not `/admin`)
-- After login, redirect admins to `/admin` (existing behavior)
+### Step 5: Update Capacitor Config
+- Set the server URL for hot-reload during development
+- Ensure splash screen flows into the auth screen
 
 ### Technical Details
-- **New tables**: `profiles`, `customer_messages`
-- **New pages**: `/signup`, `/portal`, `/portal/inquiry/:id`
-- **Modified pages**: `/login` (dual-mode), Admin `LeadDetail` (message thread)
-- **New components**: `CustomerPortal`, `InquiryDetail`, `MessageThread`, `StatusTracker`
-- **Auth changes**: Enable public signups, add email confirmation
-- **RLS policies**: Customer sees only own data; admin sees all
-- **Realtime**: `customer_messages` for live messaging
+- **New components**: `AppShell.tsx` (bottom tab layout), `AuthGuard.tsx` (route protection), `BottomTabBar.tsx`
+- **Modified**: `App.tsx` (restructure routes), `Login.tsx` & `Signup.tsx` (mobile redesign), `capacitor.config.ts` (add server URL)
+- **New pages**: Refactored tab pages for Home, Chat, Services, Profile
+- **No database changes needed** — all existing tables and auth work as-is
 
