@@ -31,6 +31,7 @@ const Admin = () => {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [messageCounts, setMessageCounts] = useState<Record<string, number>>({});
 
   const exportCSV = () => {
     if (leads.length === 0) {
