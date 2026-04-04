@@ -33,7 +33,7 @@ const stageColors: Record<string, string> = {
   closed: "border-emerald-500/30",
 };
 
-const LeadPipeline = ({ leads, onSelect, onUpdate }: LeadPipelineProps) => {
+const LeadPipeline = ({ leads, onSelect, onUpdate, messageCounts = {} }: LeadPipelineProps) => {
   const handleDragStart = (e: React.DragEvent, leadId: string) => {
     e.dataTransfer.setData("leadId", leadId);
   };
