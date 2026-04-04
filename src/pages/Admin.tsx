@@ -68,6 +68,20 @@ const Admin = () => {
     }
   }, []);
 
+  const fetchMessageCounts = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("customer_messages")
+      .select("submission_id");
+
+    if (!error && data) {
+      const counts: Record<string, number> = {};
+      data.forEach((m) => {
+        counts[m.submission_id] = (counts[m.submission_id] || 0) + 1;
+      });
+      setMessageCounts(counts);
+    }
+  }, []);
+
   useEffect(() => {
     if (isAdmin) fetchLeads();
   }, [isAdmin, fetchLeads]);
