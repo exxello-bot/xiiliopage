@@ -12,7 +12,10 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService.tsx"));
 const Install = lazy(() => import("./pages/Install.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
+const Signup = lazy(() => import("./pages/Signup.tsx"));
 const Admin = lazy(() => import("./pages/Admin.tsx"));
+const Portal = lazy(() => import("./pages/Portal.tsx"));
+const InquiryDetail = lazy(() => import("./pages/InquiryDetail.tsx"));
 
 const queryClient = new QueryClient();
 
